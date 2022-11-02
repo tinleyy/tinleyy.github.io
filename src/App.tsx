@@ -1,28 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
-import { getAllIndexes } from './service/indexes';
-import { IndexesResponse } from './service/indexes/types';
+import createMap from './utils/GoogleMapsUtils';
+import LayerTwo from './pages/LayerTwo/LayerTwo';
 
 function App() {
-  const [indexes, setIndexes] = useState<IndexesResponse[]>([]);
-
-  const fetchAllIndexes = async () => {
-    const data = await getAllIndexes();
-    setIndexes(data);
-  };
-
   useEffect(() => {
-    fetchAllIndexes();
+    const mapDiv = document.getElementById("map");
+    if (mapDiv) {
+      createMap();
+    }
   }, []);
 
   return (
-    <div>
-      <ul>
-        {indexes.map(index=> (
-          <li key={index.id}>{index.name}</li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <LayerTwo/>
+      <div id="map" className="layer1"></div>
+    </>
   );
 }
 

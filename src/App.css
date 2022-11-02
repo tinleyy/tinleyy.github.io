@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+#map {
+  position: initial !important;
+}
+
+.layer1{
+  z-index: 1;
+}
+
+.layer2{
+  z-index: 2;
+}

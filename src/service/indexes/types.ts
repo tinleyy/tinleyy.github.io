@@ -12,6 +12,17 @@ export interface IndexesResponse {
     updated_at: Date
 }
 
+export interface IndexesRequest {
+    name: string,
+    description: string,
+    standard: number,
+    low: number,
+    middle: number,
+    high: number,
+    very_high: number,
+    hidden: boolean
+}
+
 export const defaultProps = {
     id: 0,
     name: 'name',

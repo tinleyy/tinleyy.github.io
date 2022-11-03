@@ -18,6 +18,7 @@
 #bottom_results_control_panel {
     height: 65%;
     background-color:#ECECEC;
+    border-radius: 0% 0% 5% 0%;
 }
 
 .create_button--white {

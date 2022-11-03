@@ -25,4 +25,5 @@ export const axiosWithoutAuth = ({
   axios.create({
     baseURL,
     timeout: timeoutInSeconds * 1000,
+    withCredentials: true
   });

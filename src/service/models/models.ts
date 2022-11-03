@@ -1,10 +1,7 @@
 import { axiosWithoutAuth } from '../axios';
-import { IndexesResponse, IndexesRequest } from './types';
-//import useSWR from 'swr';
+import { ModelsResponse, ModelsRequest } from './types';
 
-//const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-export const getAllIndexes = async (): Promise<IndexesResponse[]> => {
+export const getAllModels = async (): Promise<ModelsResponse[]> => {
     const { data } = await axiosWithoutAuth().get(
       `${base}/?name=&skip=0&limit=100`
     );
@@ -12,11 +9,11 @@ export const getAllIndexes = async (): Promise<IndexesResponse[]> => {
     return data.data;
 };
 
-export const createIndex = async(req: IndexesRequest): Promise<IndexesResponse> => {
+export const createModel = async(req: ModelsRequest): Promise<ModelsResponse> => {
   const { data } = await axiosWithoutAuth().post(
     `${base}/`, req
   );
   return data;
 }
 
-let base = "/index";
+let base = "/model";

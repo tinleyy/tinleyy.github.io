@@ -19,4 +19,25 @@ export const createIndex = async(req: IndexesRequest): Promise<IndexesResponse> 
   return data;
 }
 
+export const getOneIndex = async (id: number): Promise<IndexesResponse> => {
+  const { data } = await axiosWithoutAuth().get(
+    `${base}/${id}`
+  );
+  return data.data;
+};
+
+export const updateOneIndex = async (id: number, req: IndexesRequest): Promise<IndexesResponse> => {
+  const { data } = await axiosWithoutAuth().put(
+    `${base}/${id}`, req
+  );
+  return data.data;
+};
+
+export const deleteOneIndex = async (id: number): Promise<IndexesResponse> => {
+  const { data } = await axiosWithoutAuth().delete(
+    `${base}/${id}`
+  );
+  return data.data;
+};
+
 let base = "/index";

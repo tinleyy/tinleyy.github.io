@@ -16,4 +16,25 @@ export const createModel = async(req: ModelsRequest): Promise<ModelsResponse> =>
   return data;
 }
 
+export const getOneModel = async (id: number): Promise<ModelsResponse> => {
+  const { data } = await axiosWithoutAuth().get(
+    `${base}/${id}`
+  );
+  return data.data;
+};
+
+export const updateOneModel = async (id: number, req: ModelsRequest): Promise<ModelsResponse> => {
+  const { data } = await axiosWithoutAuth().put(
+    `${base}/${id}`, req
+  );
+  return data.data;
+};
+
+export const deleteOneModel = async (id: number): Promise<ModelsResponse> => {
+  const { data } = await axiosWithoutAuth().delete(
+    `${base}/${id}`
+  );
+  return data.data;
+};
+
 let base = "/model";

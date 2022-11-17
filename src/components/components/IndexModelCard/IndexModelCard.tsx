@@ -1,6 +1,7 @@
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import { IndexesResponse } from '../../../service/indexes/types';
 import { ModelsResponse } from '../../../service/models/types';
+import DataObjectIcon from '@mui/icons-material/DataObject';
 import './IndexModelCard.css';
 
 function instanceOfIndexes(data: any): data is IndexesResponse {
@@ -43,6 +44,9 @@ export default function IndexModelCard({ data }: { data: IndexesResponse | Model
     );
   }
   else {
+    const indexes = Object.values(data.indexes);
+    const models = Object.values(data.models);
+
     return (
       <Card>
         <CardContent>
@@ -52,6 +56,18 @@ export default function IndexModelCard({ data }: { data: IndexesResponse | Model
               <Typography variant="subtitle1">#{data.id}</Typography>
               <Typography variant="caption" display="block">{data.description}</Typography>
             </Grid>
+          </Grid>
+          <Grid container>
+            {
+              indexes.map((d, index) => {
+                return (
+                  <Grid item key={index}>
+                    <DataObjectIcon/>
+                    {d?.index_id}
+                  </Grid>
+                );
+              })
+            }
           </Grid>
           <Grid container justifyContent="flex-end">
             <Button variant="outlined">

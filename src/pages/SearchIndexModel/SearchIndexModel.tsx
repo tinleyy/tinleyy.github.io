@@ -75,6 +75,9 @@ export default function SearchIndexModel() {
     const data = await getAllModels();
     setModels(data);
   }
+  const handleBasicSearch = () => {
+
+  }
 
   useEffect(() => {
     fetchAllIndexes();
@@ -87,7 +90,7 @@ export default function SearchIndexModel() {
         {/* Search Box */}
         <Grid container>
           <Grid item xs={12} sm={7} md={7} xl={7} py={3} pl={3}>
-            <SearchInputBase />
+            <SearchInputBase onClick={handleBasicSearch}/>
           </Grid>
           <Grid item xs={12} sm={4} md={4} xl={4} p={3}>
             <ButtonGroup variant="outlined" aria-label="outlined button group" className="advance_analysis_button--dark">

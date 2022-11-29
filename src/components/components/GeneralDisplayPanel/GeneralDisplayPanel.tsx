@@ -1,5 +1,4 @@
 import { Card, CardContent, Chip, Grid } from '@mui/material';
-import { useState } from 'react';
 import './GeneralDisplayPanel.css';
 
 export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIndexModel }: { data: any[], selectedCard: string, handleSelectIndexModel: Function }) {

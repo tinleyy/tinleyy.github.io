@@ -6,10 +6,13 @@ import IndexModelCard from '../../components/components/IndexModelCard/IndexMode
 import SearchInputBase from '../../components/components/SearchBox';
 import PageContainer from '../../components/containers/PageContainer';
 import CreateIndexForm from '../../components/forms/CreateIndexForm/CreateIndexForm';
+import CreateModelForm from '../../components/forms/CreateModelForm/CreateModelForm';
 import { getAllIndexes } from '../../service/indexes';
 import { IndexesResponse } from '../../service/indexes/types';
 import { getAllModels } from '../../service/models';
 import { ModelsResponse } from '../../service/models/types';
+import PanelContainer from '../../components/containers/PanelContainer';
+import Pagination from '@mui/material/Pagination';
 import './SearchIndexModel.css';
 
 const dataset = [
@@ -51,6 +54,16 @@ const style = {
 export default function SearchIndexModel() {
   const [indexes, setIndexes] = useState<IndexesResponse[]>([]);
   const [models, setModels] = useState<ModelsResponse[]>([]);
+  const [skip, setSkip] = useState(0);
+  const [limit, setLimit] = useState(2);
+
+  const [keyword, setKeyword] = useState("");
+  const [pTotal, setPTotal] = useState(0);
+  const [pPage, setPPage] = useState(0);
+  const handleChangePPage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPPage(value);
+    setSkip((value-1)*limit);
+  };
 
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
@@ -58,7 +71,7 @@ export default function SearchIndexModel() {
   const handleClose = () => setOpen(false);
   const handleChangePage = (page: number) => {
     handleOpen();
-    setPage(1);
+    setPage(page);
   }
 
   const [selectedCard, setSelectedCard] = useState<string>("Index");
@@ -67,7 +80,12 @@ export default function SearchIndexModel() {
   }
 
   const fetchAllIndexes = async () => {
-    const data = await getAllIndexes();
+    if(skip === 0){
+      const data = await getAllIndexes(keyword, 0, null);
+      let total = Math.round(data.length / limit);
+      setPTotal(total);
+    }
+    const data = await getAllIndexes(keyword, skip, limit);
     setIndexes(data);
   };
 
@@ -75,14 +93,17 @@ export default function SearchIndexModel() {
     const data = await getAllModels();
     setModels(data);
   }
-  const handleBasicSearch = () => {
-
+  const handleBasicSearch = async (keyword: string) => {
+    if (selectedCard === "Index") {
+      setKeyword(keyword);
+      setSkip(0);
+    }
   }
 
   useEffect(() => {
     fetchAllIndexes();
     fetchAllModels();
-  }, []);
+  }, [skip, keyword]);
 
   return (
     <div className="Dashboad layer2">
@@ -90,7 +111,7 @@ export default function SearchIndexModel() {
         {/* Search Box */}
         <Grid container>
           <Grid item xs={12} sm={7} md={7} xl={7} py={3} pl={3}>
-            <SearchInputBase onClick={handleBasicSearch}/>
+            <SearchInputBase onClick={handleBasicSearch} />
           </Grid>
           <Grid item xs={12} sm={4} md={4} xl={4} p={3}>
             <ButtonGroup variant="outlined" aria-label="outlined button group" className="advance_analysis_button--dark">
@@ -114,32 +135,52 @@ export default function SearchIndexModel() {
       <div id="bottom_results_control_panel">
         {/* Create New Index or Model Button */}
         <Box p={1}>
-          <Button className="create_button--white" onClick={() => handleChangePage(1)}>
-            Create New
-          </Button>
+          <PanelContainer currentPanel={selectedCard} targetPanel="Index">
+            <Button className="create_button--white" onClick={() => handleChangePage(1)}>
+              Create New
+            </Button>
+          </PanelContainer>
+
+          <PanelContainer currentPanel={selectedCard} targetPanel="Model">
+            <Button className="create_button--white" onClick={() => handleChangePage(2)}>
+              Create New
+            </Button>
+          </PanelContainer>
         </Box>
 
         {/* Display Index or Model here */}
         <Box p={1}>
-          {
-            selectedCard === "Index" ?
-              indexes.map((indexes, index) => (
-                <div key={index}>
-                  <Box mb={1}>
-                    <IndexModelCard data={indexes} />
-                  </Box>
-                </div>
-              ))
-              : models.map((models, index) => (
-                <div key={index}>
-                  <Box mb={1}>
-                    <IndexModelCard data={models} />
-                  </Box>
-                </div>
-              ))
-          }
+          <PanelContainer currentPanel={selectedCard} targetPanel="Index">
+            <>
+              {
+                indexes.map((indexes, index) => (
+                  <div key={index}>
+                    <Box mb={1}>
+                      <IndexModelCard data={indexes} />
+                    </Box>
+                  </div>
+                ))
+              }
+            </>
+          </PanelContainer>
+
+          <PanelContainer currentPanel={selectedCard} targetPanel="Model">
+            <>
+              {
+                models.map((models, index) => (
+                  <div key={index}>
+                    <Box mb={1}>
+                      <IndexModelCard data={models} />
+                    </Box>
+                  </div>
+                ))
+              }
+            </>
+          </PanelContainer>
         </Box>
-      </div >
+
+        <Pagination count={pTotal} page={pPage} onChange={handleChangePPage} />
+      </div>
 
       <Modal
         open={open}
@@ -150,6 +191,9 @@ export default function SearchIndexModel() {
         <Box sx={style}>
           <PageContainer currentPage={page} targetPage={1}>
             <CreateIndexForm />
+          </PageContainer>
+          <PageContainer currentPage={page} targetPage={2}>
+            <CreateModelForm />
           </PageContainer>
         </Box>
       </Modal>

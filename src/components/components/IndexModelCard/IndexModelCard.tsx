@@ -1,7 +1,6 @@
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import { IndexesResponse } from '../../../service/indexes/types';
 import { ModelsResponse } from '../../../service/models/types';
-import DataObjectIcon from '@mui/icons-material/DataObject';
 import './IndexModelCard.css';
 
 function instanceOfIndexes(data: any): data is IndexesResponse {
@@ -62,12 +61,17 @@ export default function IndexModelCard({ data }: { data: IndexesResponse | Model
               indexes.map((d, index) => {
                 return (
                   <Grid item key={index}>
-                    <DataObjectIcon/>
-                    {d?.index_id}
+                    <Button>
+                      <Chip label={"%" + d?.formula_id} className="index_id_chip" />
+                      {"[" + d?.index_id + "] " + d?.name}
+                    </Button>
                   </Grid>
                 );
               })
             }
+          </Grid>
+          <Grid container>
+            {"Formula " + data.formula}
           </Grid>
           <Grid container justifyContent="flex-end">
             <Button variant="outlined">

@@ -7,16 +7,16 @@ function instanceOfIndexes(data: any): data is IndexesResponse {
   return 'standard' in data;
 }
 
-export default function IndexModelCard({ data }: { data: IndexesResponse | ModelsResponse }) {
+export default function IndexModelCard({ data, handleDetails, handleDelete }: { data: IndexesResponse | ModelsResponse, handleDetails: Function, handleDelete: Function }) {
   if (instanceOfIndexes(data)) {
     return (
       <Card>
         <CardContent>
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={5} md={5} xl={5}>
               <Typography variant="h6">{data.name}</Typography>
               <Typography variant="subtitle1">#{data.id}</Typography>
-              <Typography variant="caption" display="block">{data.description}</Typography>
+              <Typography variant="caption" display="block" className="description">{data.description}</Typography>
             </Grid>
             <Grid item xs={12} sm={7} md={7} xl={7}>
               <Grid container rowSpacing={2}>
@@ -33,10 +33,17 @@ export default function IndexModelCard({ data }: { data: IndexesResponse | Model
               </Grid>
             </Grid>
           </Grid>
-          <Grid container justifyContent="flex-end">
-            <Button variant="outlined">
-              Details
-            </Button>
+          <Grid container justifyContent="flex-end" spacing={2}>
+            <Grid item>
+              <Button variant="outlined" color="error" onClick={() => handleDelete(data.id)}>
+                Delete
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" onClick={() => handleDetails(data.id)}>
+                Details
+              </Button>
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
@@ -53,7 +60,7 @@ export default function IndexModelCard({ data }: { data: IndexesResponse | Model
             <Grid item xs={12} sm={5} md={5} xl={5}>
               <Typography variant="h6">{data.name}</Typography>
               <Typography variant="subtitle1">#{data.id}</Typography>
-              <Typography variant="caption" display="block">{data.description}</Typography>
+              <Typography variant="caption" display="block" className="description">{data.description}</Typography>
             </Grid>
           </Grid>
           <Grid container>
@@ -73,10 +80,17 @@ export default function IndexModelCard({ data }: { data: IndexesResponse | Model
           <Grid container>
             {"Formula " + data.formula}
           </Grid>
-          <Grid container justifyContent="flex-end">
-            <Button variant="outlined">
-              Details
-            </Button>
+          <Grid container justifyContent="flex-end" spacing={2}>
+            <Grid item>
+              <Button variant="outlined" color="error" onClick={() => handleDelete(data.id)}>
+                Delete
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" onClick={() => handleDetails(data.id)}>
+                Details
+              </Button>
+            </Grid>
           </Grid>
         </CardContent>
       </Card>

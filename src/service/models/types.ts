@@ -9,11 +9,23 @@ export interface ModelsResponse {
     updated_at: Date
 }
 
+export interface Indexes {
+    formula_id: number,
+    index_id: number,
+    index_name: string
+}
+
+export interface Models {
+    formula_id: number,
+    model_id: number,
+    model_name: string
+}
+
 export interface ModelsRequest {
     name: string,
     description: string,
-    // indexes: JSON,
-    // models: JSON,
+    indexes: [],
+    models: [],
     formula: string,
 }
 

@@ -1,9 +1,9 @@
 import { axiosWithoutAuth } from '../axios';
-import { IndexesResponse, IndexesRequest } from './types';
+import { SensorsResponse, SensorsRequest } from './types';
 //import useSWR from 'swr';
 //const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export const getAllIndexes = async (keyword: string, skip: number, limit: number | any): Promise<IndexesResponse[]> => {
+export const getAllSensors = async (keyword: string, skip: number, limit: number | any): Promise<SensorsResponse[]> => {
   const { data } = await axiosWithoutAuth().get(
     `${base}/?name=${keyword}&skip=${skip}${limit ? `&limit=${limit}` : ""}`
   );
@@ -11,32 +11,32 @@ export const getAllIndexes = async (keyword: string, skip: number, limit: number
   return data.data;
 };
 
-export const createIndex = async (req: IndexesRequest): Promise<IndexesResponse> => {
+export const createSensor = async (req: SensorsRequest): Promise<SensorsResponse> => {
   const { data } = await axiosWithoutAuth().post(
     `${base}/`, req
   );
   return data;
 }
 
-export const getOneIndex = async (id: number): Promise<IndexesResponse> => {
+export const getOneSensor = async (id: number): Promise<SensorsResponse> => {
   const { data } = await axiosWithoutAuth().get(
     `${base}/${id}`
   );
-  return data;
+  return data.data;
 };
 
-export const updateOneIndex = async (id: number, req: IndexesRequest): Promise<IndexesResponse> => {
+export const updateOneSensor = async (id: number, req: SensorsRequest): Promise<SensorsResponse> => {
   const { data } = await axiosWithoutAuth().put(
     `${base}/${id}`, req
   );
   return data.data;
 };
 
-export const deleteOneIndex = async (id: number): Promise<IndexesResponse> => {
+export const deleteOneSensor = async (id: number): Promise<SensorsResponse> => {
   const { data } = await axiosWithoutAuth().delete(
     `${base}/${id}`
   );
-  return data;
+  return data.data;
 };
 
-let base = "/index";
+let base = "/sensor";

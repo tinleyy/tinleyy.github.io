@@ -1,4 +1,5 @@
 import { Input } from "@material-ui/core";
+import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { createModel } from "../../../service/models";
 import { ModelsRequest } from "../../../service/models/types";
@@ -7,10 +8,23 @@ import BasicTabs from "./Tabs/Tabs";
 
 export default function CreateModelForm() {
   // const alert = useAlert();
+
+  const [indexes, setIndexes] = useState<[]>([]);
+  const handleIndexesChanges = (indexesList: []) => {
+    setIndexes(indexesList);
+  }
+  const [models, setModels] = useState<[]>([]);
+  const handleModelsChanges = (modelsList: []) => {
+    setModels(modelsList);
+  }
+
   const { control, handleSubmit, /*watch,*/ formState: { errors } } = useForm<ModelsRequest>();
   const onSubmit: SubmitHandler<ModelsRequest> = async data => {
-    // console.log(data);
-    const response = await createModel(data);
+    let request = data;
+    request.indexes = indexes;
+    request.models = models;
+    
+    const response = await createModel(request);
     if (response?.id) {
       alert(`Model ${response.id} created successfully`);
     }
@@ -39,7 +53,7 @@ export default function CreateModelForm() {
       />
       {errors.description && "Description is required"}
 
-      <BasicTabs/>
+      <BasicTabs handleIndexesChanges={handleIndexesChanges} handleModelsChanges={handleModelsChanges} />
 
       <div>Formula</div>
       <Controller

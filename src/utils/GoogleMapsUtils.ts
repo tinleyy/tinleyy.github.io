@@ -22,7 +22,7 @@ async function initMap() {
 }
 
 async function initWebGLOverlayView(map: google.maps.Map | null) {
-    let scene: any, renderer: any, camera: any, loader;
+    let scene: any, renderer: any, camera: any;
     const webGLOverlayView = new google.maps.WebGLOverlayView();
 
     webGLOverlayView.onAdd = () => {
@@ -54,9 +54,31 @@ async function initWebGLOverlayView(map: google.maps.Map | null) {
     webGLOverlayView.setMap(map);
 }
 
+function addMarkerToMap(map: any, position: any, contentString: string) {
+    const marker = new google.maps.Marker({
+        position: position,
+        map: map
+    });
+
+    const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: "Uluru",
+    });
+
+    marker.addListener("click", () => {
+        infowindow.open({
+            anchor: marker,
+            map,
+        });
+    });
+}
+
 async function createMap() {
     const map = await initMap();
     initWebGLOverlayView(map);
+    return map;
 }
 
-export default createMap;
+export {
+    createMap, addMarkerToMap
+};

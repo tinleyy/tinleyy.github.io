@@ -3,7 +3,6 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { createIndex } from '../../../service/indexes';
 import { IndexesRequest } from "../../../service/indexes/types";
 import "./CreateIndexForm.css";
-import { useAlert } from "react-alert";
 
 export default function CreateIndexForm() {
   // const alert = useAlert();

@@ -1,19 +1,22 @@
 import { LineAxis, Timeline } from '@mui/icons-material';
-import { Box, Button, ButtonGroup, Grid, Modal } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Box, Button, ButtonGroup, Grid, IconButton, Modal } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import { useEffect, useState } from 'react';
 import GeneralDisplayPanel from '../../components/components/GeneralDisplayPanel/GeneralDisplayPanel';
 import IndexModelCard from '../../components/components/IndexModelCard/IndexModelCard';
 import SearchInputBase from '../../components/components/SearchBox';
 import PageContainer from '../../components/containers/PageContainer';
+import PanelContainer from '../../components/containers/PanelContainer';
 import CreateIndexForm from '../../components/forms/CreateIndexForm/CreateIndexForm';
 import CreateModelForm from '../../components/forms/CreateModelForm/CreateModelForm';
-import { getAllIndexes } from '../../service/indexes';
+import { getAllIndexes, getOneIndex } from '../../service/indexes';
 import { IndexesResponse } from '../../service/indexes/types';
 import { getAllModels } from '../../service/models';
 import { ModelsResponse } from '../../service/models/types';
-import PanelContainer from '../../components/containers/PanelContainer';
-import Pagination from '@mui/material/Pagination';
 import './SearchIndexModel.css';
+import { deleteOneIndex } from '../../service/indexes';
+import { deleteOneModel } from '../../service/models';
 
 const dataset = [
   {
@@ -51,18 +54,20 @@ const style = {
   p: 4,
 };
 
-export default function SearchIndexModel() {
+export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIndexDetails }: { handleOpenCloseMenu: Function, handleSwitchToIndexDetails: Function }) {
   const [indexes, setIndexes] = useState<IndexesResponse[]>([]);
   const [models, setModels] = useState<ModelsResponse[]>([]);
+  const [updated, setUpdated] = useState(false);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(2);
 
+  // pagination
   const [keyword, setKeyword] = useState("");
   const [pTotal, setPTotal] = useState(0);
-  const [pPage, setPPage] = useState(0);
+  const [pPage, setPPage] = useState(1);
   const handleChangePPage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPPage(value);
-    setSkip((value-1)*limit);
+    setSkip((value - 1) * limit);
   };
 
   const [page, setPage] = useState(0);
@@ -76,11 +81,13 @@ export default function SearchIndexModel() {
 
   const [selectedCard, setSelectedCard] = useState<string>("Index");
   const handleSelectIndexModel = (selected: string) => {
-    setSelectedCard(selected)
+    setSelectedCard(selected);
+    setSkip(0);
+    setUpdated(true);
   }
 
   const fetchAllIndexes = async () => {
-    if(skip === 0){
+    if (skip === 0) {
       const data = await getAllIndexes(keyword, 0, null);
       let total = Math.round(data.length / limit);
       setPTotal(total);
@@ -90,40 +97,65 @@ export default function SearchIndexModel() {
   };
 
   const fetchAllModels = async () => {
-    const data = await getAllModels();
+    if (skip === 0) {
+      const data = await getAllModels(keyword, 0, null);
+      let total = Math.round(data.length / limit);
+      setPTotal(total);
+    }
+    const data = await getAllModels(keyword, skip, limit);
     setModels(data);
   }
+
   const handleBasicSearch = async (keyword: string) => {
-    if (selectedCard === "Index") {
-      setKeyword(keyword);
-      setSkip(0);
+    setKeyword(keyword);
+    setSkip(0);
+  }
+
+  const handleDetails = async (id: number) => {
+    if(selectedCard === "Index"){
+      const data = await getOneIndex(id);
+      handleSwitchToIndexDetails(data);
+    }
+    else if(selectedCard === "Model"){
+
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    if(selectedCard === "Index"){
+      const data = await deleteOneIndex(id);
+      if(data){
+        setUpdated(!updated);
+        alert(`deleted Index ${data.id} sucessfully`);
+      }
+    }
+    else if(selectedCard === "Model"){
+      const data = await deleteOneModel(id);
+      if(data){
+        setUpdated(!updated);
+        alert(`delete Model ${data.id} successfully`);
+      }
     }
   }
 
   useEffect(() => {
-    fetchAllIndexes();
-    fetchAllModels();
-  }, [skip, keyword]);
+    if (selectedCard === "Index") fetchAllIndexes();
+    if (selectedCard === "Model") fetchAllModels();
+  }, [skip, keyword, selectedCard, updated]);
 
   return (
-    <div className="Dashboad layer2">
+    <div className="Dashboad">
       <div id="top_search_fields">
         {/* Search Box */}
         <Grid container>
+          <Grid item xs={12} sm={1} md={1} xl={1} display="flex" justifyContent="center" alignItems="center">
+            <IconButton onClick={() => handleOpenCloseMenu()}>
+              <MenuIcon />
+            </IconButton>
+          </Grid>
           <Grid item xs={12} sm={7} md={7} xl={7} py={3} pl={3}>
             <SearchInputBase onClick={handleBasicSearch} />
           </Grid>
-          <Grid item xs={12} sm={4} md={4} xl={4} p={3}>
-            <ButtonGroup variant="outlined" aria-label="outlined button group" className="advance_analysis_button--dark">
-              <Button startIcon={<Timeline />}>
-                Relationship
-              </Button>
-              <Button startIcon={<LineAxis />}>
-                Pattern
-              </Button>
-            </ButtonGroup>
-          </Grid>
-          <Grid item xs={12} sm={1} md={1} xl={1}></Grid>
         </Grid>
 
         {/* Display Common Index or Model */}
@@ -156,7 +188,7 @@ export default function SearchIndexModel() {
                 indexes.map((indexes, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={indexes} />
+                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete}/>
                     </Box>
                   </div>
                 ))
@@ -170,7 +202,7 @@ export default function SearchIndexModel() {
                 models.map((models, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={models} />
+                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete}/>
                     </Box>
                   </div>
                 ))
@@ -179,7 +211,11 @@ export default function SearchIndexModel() {
           </PanelContainer>
         </Box>
 
-        <Pagination count={pTotal} page={pPage} onChange={handleChangePPage} />
+        {
+          pTotal && pPage ?
+            <Pagination count={pTotal} page={pPage} onChange={handleChangePPage} />
+            : <></>
+        }
       </div>
 
       <Modal

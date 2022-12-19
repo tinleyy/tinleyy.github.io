@@ -1,0 +1,30 @@
+.Dashboad {
+    width: 70%;
+    height: 100%;
+    position: absolute;
+    background-color: #ffffffe3;
+    border-radius: 0% 5% 5% 0%;
+}
+
+.advance_analysis_button--dark Button{
+    color: #36464E;
+    border-color: #36464E;
+}
+
+#top_search_fields {
+    height: 35%;
+}
+
+#bottom_results_control_panel {
+    height: 65%;
+    background-color:#ECECEC;
+    border-radius: 0% 0% 5% 0%;
+}
+
+.create_button--white {
+    color: #36464E !important;
+    background-color: #fff !important;
+    border-color: #7491AF !important;
+    width: -webkit-fill-available !important;
+    border-radius: 0.5rem !important;
+}

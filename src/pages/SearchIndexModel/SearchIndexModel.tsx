@@ -1,7 +1,7 @@
-import { LineAxis, Timeline } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Button, ButtonGroup, Grid, IconButton, Modal } from '@mui/material';
+import { Box, Button, Grid, IconButton, Modal } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
+import ModelProgressing from '../../pages/ModelProgressing/ModelProgressing';
 import { useEffect, useState } from 'react';
 import GeneralDisplayPanel from '../../components/components/GeneralDisplayPanel/GeneralDisplayPanel';
 import IndexModelCard from '../../components/components/IndexModelCard/IndexModelCard';
@@ -10,13 +10,11 @@ import PageContainer from '../../components/containers/PageContainer';
 import PanelContainer from '../../components/containers/PanelContainer';
 import CreateIndexForm from '../../components/forms/CreateIndexForm/CreateIndexForm';
 import CreateModelForm from '../../components/forms/CreateModelForm/CreateModelForm';
-import { getAllIndexes, getOneIndex } from '../../service/indexes';
+import { deleteOneIndex, getAllIndexes, getOneIndex } from '../../service/indexes';
 import { IndexesResponse } from '../../service/indexes/types';
-import { getAllModels } from '../../service/models';
+import { deleteOneModel, getAllModels, getOneModel } from '../../service/models';
 import { ModelsResponse } from '../../service/models/types';
 import './SearchIndexModel.css';
-import { deleteOneIndex } from '../../service/indexes';
-import { deleteOneModel } from '../../service/models';
 
 const dataset = [
   {
@@ -48,13 +46,13 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 'auto',
   bgcolor: 'background.paper',
   borderRadius: 2,
   p: 4,
 };
 
-export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIndexDetails }: { handleOpenCloseMenu: Function, handleSwitchToIndexDetails: Function }) {
+export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIndexDetails, handleSwitchToModelDetails }: { handleOpenCloseMenu: Function, handleSwitchToIndexDetails: Function, handleSwitchToModelDetails: Function }) {
   const [indexes, setIndexes] = useState<IndexesResponse[]>([]);
   const [models, setModels] = useState<ModelsResponse[]>([]);
   const [updated, setUpdated] = useState(false);
@@ -111,27 +109,33 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
     setSkip(0);
   }
 
+  const [processingModelDetails, setProcessingModelDetails] = useState<ModelsResponse>();
   const handleDetails = async (id: number) => {
-    if(selectedCard === "Index"){
+    if (selectedCard === "Index") {
       const data = await getOneIndex(id);
       handleSwitchToIndexDetails(data);
     }
-    else if(selectedCard === "Model"){
-
+    else if (selectedCard === "Model") {
+      // call api
+      const data = await getOneModel(id);
+      setProcessingModelDetails(data);
+      // open progressing popup
+      handleChangePage(3);
+      // change page
     }
   }
 
   const handleDelete = async (id: number) => {
-    if(selectedCard === "Index"){
+    if (selectedCard === "Index") {
       const data = await deleteOneIndex(id);
-      if(data){
+      if (data) {
         setUpdated(!updated);
         alert(`deleted Index ${data.id} sucessfully`);
       }
     }
-    else if(selectedCard === "Model"){
+    else if (selectedCard === "Model") {
       const data = await deleteOneModel(id);
-      if(data){
+      if (data) {
         setUpdated(!updated);
         alert(`delete Model ${data.id} successfully`);
       }
@@ -188,7 +192,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
                 indexes.map((indexes, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete}/>
+                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete} />
                     </Box>
                   </div>
                 ))
@@ -202,7 +206,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
                 models.map((models, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete}/>
+                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete} />
                     </Box>
                   </div>
                 ))
@@ -230,6 +234,9 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
           </PageContainer>
           <PageContainer currentPage={page} targetPage={2}>
             <CreateModelForm />
+          </PageContainer>
+          <PageContainer currentPage={page} targetPage={3}>
+            <ModelProgressing modelDetails={processingModelDetails} handleSwitchToModelDetails={handleSwitchToModelDetails}/>
           </PageContainer>
         </Box>
       </Modal>

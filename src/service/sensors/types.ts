@@ -3,6 +3,7 @@ export interface SensorsResponse {
     latitude: number,
     longitude: number,
     distinct: string,
+    remarks: string
     created_at: Date,
     updated_at: Date
 }
@@ -10,7 +11,8 @@ export interface SensorsResponse {
 export interface SensorsRequest {
     latitude: number,
     longitude: number,
-    distinct: string
+    distinct: string,
+    remarks: string
 }
 
 export const defaultProps = {

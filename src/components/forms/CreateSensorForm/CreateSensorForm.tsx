@@ -42,6 +42,13 @@ export default function CreateSensorForm() {
         control={control}
         defaultValue=""
       />
+      <div>Remarks</div>
+      <Controller
+        render={({ field }) => <Input {...field} className="materialUIInput" />}
+        name="remarks"
+        control={control}
+        defaultValue=""
+      />
 
       <div>
         <input type="submit" />

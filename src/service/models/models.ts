@@ -20,7 +20,7 @@ export const getOneModel = async (id: number): Promise<ModelsResponse> => {
   const { data } = await axiosWithoutAuth().get(
     `${base}/${id}`
   );
-  return data.data;
+  return data;
 };
 
 export const updateOneModel = async (id: number, req: ModelsRequest): Promise<ModelsResponse> => {

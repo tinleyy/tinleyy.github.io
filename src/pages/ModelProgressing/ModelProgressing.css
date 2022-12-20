@@ -1,0 +1,25 @@
+.index-name {
+    background-color: cadetblue;
+    color: white;
+}
+
+.process-button {
+    background-color: #4B4BF9 !important;
+}
+
+.formula--text{
+    background-color: chocolate;
+    color: white;
+    padding: inherit;
+    font-weight: 700;
+}
+
+.text--light{
+    font-weight: 300;
+}
+
+.data-found--box{
+    border-radius: 5px;
+    border: 0.1rem solid;
+    color: grey;
+}

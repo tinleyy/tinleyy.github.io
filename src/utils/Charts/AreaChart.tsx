@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker';
 import {
   CategoryScale, Chart as ChartJS, Filler,
   Legend, LinearScale, LineElement, PointElement, Title,
@@ -105,7 +104,7 @@ export const options = {
 //   ],
 // };
 
-function mapToChartData({ labels, data }: { labels: Array<any>, data: Array<any>}){
+function mapToChartData({ labels, data }: { labels: Array<any>, data: Array<any> }) {
   return {
     labels,
     datasets: [
@@ -120,7 +119,7 @@ function mapToChartData({ labels, data }: { labels: Array<any>, data: Array<any>
   };
 }
 
-export function AreaChart({ data }: { data: IndexSensorsResponse[] }) {
+export function AreaChart({ data }: { data: IndexSensorsResponse[] | Array<any> }) {
   let amount: Array<any> = [];
   let label: Array<any> = [];
   data.map((d, index) => {
@@ -129,6 +128,6 @@ export function AreaChart({ data }: { data: IndexSensorsResponse[] }) {
   })
 
   const chartdata = mapToChartData({ labels: label, data: amount });
-  
+
   return <Line options={options} data={chartdata} />;
 }

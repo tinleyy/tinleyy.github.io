@@ -30,12 +30,13 @@ export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIn
         return (
           <Grid item key={index} xs={12} sm={6} md={6} xl={6} p={3}>
             <div onClick={() => handleSelectIndexModel(title)}>
-              <Card className={selectedCard === title ? "search_IndexModelCard--border--left--grey" : ""}>
+              <Card className={selectedCard === title ? "search_IndexModelCard--selected" : "can--select"}>
                 <CardContent>
                   <Grid container>
                     <Grid item>
                       <h4>{title}</h4>
                     </Grid>
+                    &nbsp;
                     <PanelContent content={content} />
                   </Grid>
                 </CardContent>

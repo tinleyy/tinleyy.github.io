@@ -51,7 +51,7 @@ export default function Sensors({ handleOpenCloseMenu, mapStorage }: { handleOpe
     data.map((d) => {
       const contentString =
         '<div id="content">' +
-        'Sensor Position <br></br>' +
+        '<h5>' + d.remarks + '</h5>' +
         d.distinct +
         "</div>";
 

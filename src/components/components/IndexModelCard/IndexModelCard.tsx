@@ -7,7 +7,7 @@ function instanceOfIndexes(data: any): data is IndexesResponse {
   return 'standard' in data;
 }
 
-export default function IndexModelCard({ data, handleDetails, handleDelete }: { data: IndexesResponse | ModelsResponse, handleDetails: Function, handleDelete: Function }) {
+export default function IndexModelCard({ data, handleDetails, handleDelete, handleChangePage }: { data: IndexesResponse | ModelsResponse, handleDetails: Function, handleDelete: Function, handleChangePage: Function }) {
   if (instanceOfIndexes(data)) {
     return (
       <Card>
@@ -68,7 +68,7 @@ export default function IndexModelCard({ data, handleDetails, handleDelete }: { 
               indexes.map((d, index) => {
                 return (
                   <Grid item key={index}>
-                    <Button>
+                    <Button onClick={() => handleChangePage(4, d?.index_id)}>
                       <Chip label={"%" + d?.formula_id} className="index_id_chip" />
                       {"[" + d?.index_id + "] " + d?.name}
                     </Button>

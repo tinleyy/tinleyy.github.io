@@ -3,20 +3,12 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import * as React from 'react';
 import { Box } from '@mui/material';
 
-export default function ToggleDayTimeButton() {
-  const [alignment, setAlignment] = React.useState('All');
-
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
-  ) => {
-    setAlignment(newAlignment);
-  };
+export default function ToggleDayTimeButton({ selected, handleChange }: { selected: string, handleChange: any }) {
 
   return (
     <ToggleButtonGroup
       color="primary"
-      value={alignment}
+      value={selected}
       exclusive
       onChange={handleChange}
       aria-label="Platform"

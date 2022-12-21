@@ -13,25 +13,76 @@ import "./IndexChart.css";
 import { useEffect, useState } from "react";
 import { getIndexsensorsGraphdata } from "../../service/indexsensors";
 import { MathResponse, IndexSensorsResponse } from "../../service/indexsensors/types";
+import moment from "moment";
 
 export default function IndexChart({ details, handleBackToHome }: { details: IndexesResponse | ModelsResponse | null, handleBackToHome: Function }) {
     const [startDate, setStartDate] = useState("2022-01-01 00:00:00");
     const [endDate, setEndDate] = useState("2022-12-31 23:59:59");
     const [graphData, setGraphData] = useState<IndexSensorsResponse[]>([]);
-    const [mathData, setMathData] = useState<MathResponse|null>();
-    
-    const fetchGraphData = async (sensorId: number|null) => {
+    const [mathData, setMathData] = useState<MathResponse | null>();
+    const [updated, setUpdated] = useState(true);
+
+    const fetchGraphData = async (sensorId: number | null) => {
         const data = await getIndexsensorsGraphdata(details?.id || 0, sensorId ?? null, startDate, endDate);
         setGraphData(data.data);
         setMathData(data.math);
+        setUpdated(false);
     };
 
+    const [selectedDayTime, setSelectedDayTime] = useState('All');
+    const handleDayTimeChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newSelected: string,
+    ) => {
+        setSelectedDayTime(newSelected);
+
+        let startDate = "";
+        let endDate = moment().format("YYYY-MM-DD 23:59:59");
+        if (newSelected === "1D") {
+            startDate = moment().add(-1, 'days').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "5D") {
+            startDate = moment().add(-5, 'days').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "1M") {
+            startDate = moment().add(-1, 'months').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "3M") {
+            startDate = moment().add(-3, 'months').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "6M") {
+            startDate = moment().add(-6, 'months').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "YTD") {
+            startDate = moment().add(-1, 'years').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "1Y") {
+            startDate = moment().add(-1, 'years').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "2Y") {
+            startDate = moment().add(-2, 'years').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "3Y") {
+            startDate = moment().add(-3, 'years').format("YYYY-MM-DD 00:00:00");
+        }
+        else if (newSelected === "5Y") {
+            startDate = moment().add(-5, 'years').format("YYYY-MM-DD 00:00:00");
+        }
+        else {
+            endDate = "";
+        }
+        setStartDate(startDate);
+        setEndDate(endDate);
+        setUpdated(true);
+    };
+
+
     useEffect(() => {
-        if(graphData.length < 1){
+        if (updated) {
             fetchGraphData(null);
         }
-    }, []);
-    
+    }, [updated, graphData, mathData]);
+
     if (details) {
         return (
             <div className="Dashboad">
@@ -55,7 +106,7 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
                                         <h5>Toolbar</h5>
                                         <Grid container spacing={1} justifyContent="center" alignItems="center">
                                             <Grid item>
-                                                <ToggleDayTimeButton />
+                                                <ToggleDayTimeButton selected={selectedDayTime} handleChange={handleDayTimeChange} />
                                             </Grid>
                                             <Grid item>
                                                 <ToggleChartButton />
@@ -77,7 +128,7 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
 
                             <Card>
                                 <Grid container height={300} justifyContent="center">
-                                    <AreaChart data={graphData}/>
+                                    <AreaChart data={graphData} />
                                 </Grid>
                                 <Grid container justifyContent="center" alignItems="center" spacing={2} mb={2}>
                                     <Grid item className="chart-date-font-size-small">
@@ -104,7 +155,7 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
 
                         <Grid item container xs={12} sm={3} md={3} xl={3}>
                             <Grid item className="grid-item-locationselector">
-                                <LocationSelector handleLocationSelectorChange={fetchGraphData}/>
+                                <LocationSelector handleLocationSelectorChange={fetchGraphData} />
                             </Grid>
                         </Grid>
                     </Grid>

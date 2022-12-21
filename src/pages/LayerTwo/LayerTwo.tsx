@@ -8,6 +8,7 @@ import IndexChart from "../../pages/IndexChart/IndexChart";
 import { IndexesResponse } from "../../service/indexes/types";
 import { ModelsResponse } from "../../service/models/types";
 import ModelChart from "../../pages/ModelChart/ModelChart";
+import Pattern from "../../pages/Pattern/Pattern";
 
 export default function Layer2({ mapStorage }: { mapStorage: any }) {
     const [page, setPage] = useState(0);
@@ -36,16 +37,19 @@ export default function Layer2({ mapStorage }: { mapStorage: any }) {
 
     let pageContent = <></>
     if (page === 0) {
-        pageContent = <SearchIndexModel handleOpenCloseMenu={handleOpenCloseMenu} handleSwitchToIndexDetails={handleSwitchToIndexDetails} handleSwitchToModelDetails={handleSwitchToModelDetails}/>
+        pageContent = <SearchIndexModel handleOpenCloseMenu={handleOpenCloseMenu} handleSwitchToIndexDetails={handleSwitchToIndexDetails} handleSwitchToModelDetails={handleSwitchToModelDetails} />
     }
     else if (page === 1) {
         pageContent = <Sensors handleOpenCloseMenu={handleOpenCloseMenu} mapStorage={mapStorage} />
     }
     else if (page === 2) {
-        pageContent = <IndexChart details={details} handleBackToHome={handleBackToHome}/>
+        pageContent = <IndexChart details={details} handleBackToHome={handleBackToHome} />
     }
-    else if (page === 3){
-        pageContent = <ModelChart details={details}modelChartData={modelChartData} handleBackToHome={handleBackToHome}/>
+    else if (page === 3) {
+        pageContent = <ModelChart details={details} modelChartData={modelChartData} handleBackToHome={handleBackToHome} />
+    }
+    else if (page === 4) {
+        pageContent = <Pattern handleOpenCloseMenu={handleOpenCloseMenu} />
     }
 
     useEffect(() => {

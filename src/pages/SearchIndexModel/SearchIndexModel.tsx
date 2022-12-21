@@ -15,6 +15,7 @@ import { IndexesResponse } from '../../service/indexes/types';
 import { deleteOneModel, getAllModels, getOneModel } from '../../service/models';
 import { ModelsResponse } from '../../service/models/types';
 import './SearchIndexModel.css';
+import IndexDescription from '../../components/components/IndexDescription/IndexDescription';
 
 const dataset = [
   {
@@ -73,6 +74,12 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleChangePage = (page: number) => {
+    handleOpen();
+    setPage(page);
+  }
+  const[indexId, setIndexId] = useState(-1);
+  const handleChangePageWithIndexId = (page: number, indexId: number) => {
+    setIndexId(indexId);
     handleOpen();
     setPage(page);
   }
@@ -192,7 +199,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
                 indexes.map((indexes, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete} />
+                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete} handleChangePage={handleChangePageWithIndexId}/>
                     </Box>
                   </div>
                 ))
@@ -206,7 +213,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
                 models.map((models, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete} />
+                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete} handleChangePage={handleChangePageWithIndexId}/>
                     </Box>
                   </div>
                 ))
@@ -236,7 +243,10 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
             <CreateModelForm />
           </PageContainer>
           <PageContainer currentPage={page} targetPage={3}>
-            <ModelProgressing modelDetails={processingModelDetails} handleSwitchToModelDetails={handleSwitchToModelDetails}/>
+            <ModelProgressing modelDetails={processingModelDetails} handleSwitchToModelDetails={handleSwitchToModelDetails} />
+          </PageContainer>
+          <PageContainer currentPage={page} targetPage={4}>
+            <IndexDescription indexId={indexId}/>
           </PageContainer>
         </Box>
       </Modal>

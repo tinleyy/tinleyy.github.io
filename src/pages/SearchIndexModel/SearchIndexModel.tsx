@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Button, Grid, IconButton, Modal } from '@mui/material';
+import { Box, Button, Grid, IconButton, Modal, Chip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import ModelProgressing from '../../pages/ModelProgressing/ModelProgressing';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,10 @@ import { deleteOneModel, getAllModels, getOneModel } from '../../service/models'
 import { ModelsResponse } from '../../service/models/types';
 import './SearchIndexModel.css';
 import IndexDescription from '../../components/components/IndexDescription/IndexDescription';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CreateTagForm from '../../components/forms/CreateTagForm/CreateTagForm';
+import { getAllTags } from '../../service/tags';
+import { TagsResponse } from '../../service/tags/types';
 
 const dataset = [
   {
@@ -77,7 +81,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
     handleOpen();
     setPage(page);
   }
-  const[indexId, setIndexId] = useState(-1);
+  const [indexId, setIndexId] = useState(-1);
   const handleChangePageWithIndexId = (page: number, indexId: number) => {
     setIndexId(indexId);
     handleOpen();
@@ -109,6 +113,12 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
     }
     const data = await getAllModels(keyword, skip, limit);
     setModels(data);
+  }
+
+  const [tags, setTags] = useState<TagsResponse[]>([]);
+  const fetchAllTags = async () => {
+    const data = await getAllTags(keyword, 0, 0);
+    setTags(data);
   }
 
   const handleBasicSearch = async (keyword: string) => {
@@ -152,6 +162,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
   useEffect(() => {
     if (selectedCard === "Index") fetchAllIndexes();
     if (selectedCard === "Model") fetchAllModels();
+    fetchAllTags();
   }, [skip, keyword, selectedCard, updated]);
 
   return (
@@ -167,6 +178,18 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
           <Grid item xs={12} sm={7} md={7} xl={7} py={3} pl={3}>
             <SearchInputBase onClick={handleBasicSearch} />
           </Grid>
+        </Grid>
+
+        <Grid container spacing={2} px={2}>
+          <Grid item>
+            <Chip icon={<AddCircleIcon />} label="Add Tag" variant="outlined" color="primary" onClick={() => handleChangePage(5)} />
+          </Grid>
+          {
+            tags.map((tag, index) =>
+              <Grid item key={index}>
+                <Chip label={tag.name} variant="outlined" color="primary" />
+              </Grid>)
+          }
         </Grid>
 
         {/* Display Common Index or Model */}
@@ -199,7 +222,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
                 indexes.map((indexes, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete} handleChangePage={handleChangePageWithIndexId}/>
+                      <IndexModelCard data={indexes} handleDetails={handleDetails} handleDelete={handleDelete} handleChangePage={handleChangePageWithIndexId} />
                     </Box>
                   </div>
                 ))
@@ -213,7 +236,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
                 models.map((models, index) => (
                   <div key={index}>
                     <Box mb={1}>
-                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete} handleChangePage={handleChangePageWithIndexId}/>
+                      <IndexModelCard data={models} handleDetails={handleDetails} handleDelete={handleDelete} handleChangePage={handleChangePageWithIndexId} />
                     </Box>
                   </div>
                 ))
@@ -246,7 +269,10 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
             <ModelProgressing modelDetails={processingModelDetails} handleSwitchToModelDetails={handleSwitchToModelDetails} />
           </PageContainer>
           <PageContainer currentPage={page} targetPage={4}>
-            <IndexDescription indexId={indexId}/>
+            <IndexDescription indexId={indexId} />
+          </PageContainer>
+          <PageContainer currentPage={page} targetPage={5}>
+            <CreateTagForm />
           </PageContainer>
         </Box>
       </Modal>

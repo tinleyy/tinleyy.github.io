@@ -33,7 +33,7 @@ export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIn
               <Card className={selectedCard === title ? "search_IndexModelCard--selected" : "can--select"}>
                 <CardContent>
                   <Grid container>
-                    <Grid item>
+                    <Grid item pr={5}>
                       <h4>{title}</h4>
                     </Grid>
                     &nbsp;

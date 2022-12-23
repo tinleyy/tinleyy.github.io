@@ -15,8 +15,8 @@ import { getIndexsensorsGraphdata } from "../../service/indexsensors";
 import { MathResponse, IndexSensorsResponse } from "../../service/indexsensors/types";
 import moment from "moment";
 
-export default function IndexChart({ details, handleBackToHome }: { details: IndexesResponse | ModelsResponse | null, handleBackToHome: Function }) {
-    const [startDate, setStartDate] = useState("2022-01-01 00:00:00");
+export default function IndexChart({ details, handleBackToHome }: { details: IndexesResponse | undefined, handleBackToHome: Function }) {
+    const [startDate, setStartDate] = useState("2000-01-01 00:00:00");
     const [endDate, setEndDate] = useState("2022-12-31 23:59:59");
     const [graphData, setGraphData] = useState<IndexSensorsResponse[]>([]);
     const [mathData, setMathData] = useState<MathResponse | null>();
@@ -128,7 +128,7 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
 
                             <Card>
                                 <Grid container height={300} justifyContent="center">
-                                    <AreaChart data={graphData} />
+                                    <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true }} />
                                 </Grid>
                                 <Grid container justifyContent="center" alignItems="center" spacing={2} mb={2}>
                                     <Grid item className="chart-date-font-size-small">

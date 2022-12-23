@@ -30,6 +30,7 @@
 }
 
 .bottom-pattern-result {
-    height: 100%;
+    height: 65vh;
     background-color: lightgray;
+    overflow: scroll;
 }

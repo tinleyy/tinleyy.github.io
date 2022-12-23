@@ -1,38 +1,48 @@
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
-import { Box, Button, Grid, Card, CardContent } from "@mui/material";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import { IndexesResponse } from "../../service/indexes/types";
+import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { useEffect, useState } from "react";
+import { indexesInOneChart } from "../../service/general";
+import { getIndexsensorsGraphdata } from "../../service/indexsensors";
+import { IndexSensorsResponse, MathResponse } from "../../service/indexsensors/types";
 import { ModelsResponse } from "../../service/models/types";
 import { AreaChart } from "../../utils/Charts/AreaChart";
-import IndexTable from "./Table/Table";
+import { MultiLineChart } from "../../utils/Charts/MultiLineChart";
+import "./ModelChart.css";
 import ToggleChartButton from "./ToggleChartButton/ToggleChartButton";
 import ToggleDayTimeButton from "./ToggleDayTimeButton/ToggleDayTimeButton";
-import LocationSelector from "./LocationSelector/LocationSelector";
-import { Typography } from "@mui/material";
-import "./ModelChart.css";
-import { useEffect, useState } from "react";
-import { getIndexsensorsGraphdata } from "../../service/indexsensors";
-import { MathResponse, IndexSensorsResponse } from "../../service/indexsensors/types";
+import moment from "moment";
 
-export default function ModelChart({ details, modelChartData, handleBackToHome }: { details: IndexesResponse | ModelsResponse | null, modelChartData: Array<any>, handleBackToHome: Function }) {
-    const [startDate, setStartDate] = useState("2022-01-01 00:00:00");
+export default function ModelChart({ details, modelChartData, indexesInOneChartData, handleBackToHome }: { details: ModelsResponse | undefined, modelChartData: Array<any>, indexesInOneChartData: indexesInOneChart | undefined, handleBackToHome: Function }) {
+    const [startDate, setStartDate] = useState("2020-01-01 00:00:00");
     const [endDate, setEndDate] = useState("2022-12-31 23:59:59");
     const [graphData, setGraphData] = useState<IndexSensorsResponse[]>([]);
     const [mathData, setMathData] = useState<MathResponse | null>();
 
-    const fetchGraphData = async (sensorId: number | null) => {
-        const data = await getIndexsensorsGraphdata(details?.id || 0, sensorId ?? null, startDate, endDate);
-        setGraphData(data.data);
-        setMathData(data.math);
-    };
+    const [indexesChartData, setIndexesChartData] = useState<Array<any>>([]);
+    const fetchIndexesInChart = () => {
+        const indexes = details?.indexes;
+        console.log(indexes);
+        if (indexes) {
+            const currentData = indexesChartData;
+            Object.values(indexes).map(async (d, index) => {
+                const data = await getIndexsensorsGraphdata(d.index_id, null, startDate, endDate);
+                data?.data.map((d, index) => currentData.push(d))
+                setIndexesChartData(currentData);
+            });
+        }
+    }
 
     useEffect(() => {
-        console.log(modelChartData);
-        console.log(details);
-        // if(graphData.length < 1){
-        //     fetchGraphData(null);
-        // }
-    }, []);
+        // console.log(indexesInOneChartData);
+        fetchIndexesInChart();
+    }, [indexesChartData]);
 
     if (details) {
         return (
@@ -77,11 +87,11 @@ export default function ModelChart({ details, modelChartData, handleBackToHome }
                                 </Card>
                             </Grid>
 
-                            <Grid container>
-                                <Grid item>
+                            <Grid container spacing={1}>
+                                <Grid item xs={12} sm={6} md={6} xl={6}>
                                     <Card>
                                         <Grid container justifyContent="center">
-                                            <AreaChart data={modelChartData} />
+                                            <AreaChart data={modelChartData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true }} />
                                         </Grid>
                                         <Grid container justifyContent="center" alignItems="center" spacing={1} mb={2}>
                                             <Grid item className="chart-date-font-size-small">
@@ -105,12 +115,50 @@ export default function ModelChart({ details, modelChartData, handleBackToHome }
                                         </Grid>
                                     </Card>
                                 </Grid>
-                                <Grid item>
-
+                                <Grid item xs={12} sm={6} md={6} xl={6}>
+                                    <Card>
+                                        <Grid container justifyContent="center">
+                                            <MultiLineChart data={indexesInOneChartData} chartOptions={{ scalesYDisplay: true, scalesXDisplay: true, datalabelsDisplay: false }} />
+                                        </Grid>
+                                    </Card>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
+
+
+                    <TableContainer component={Paper} sx={{ maxHeight: '30vh' }}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>ID</TableCell>
+                                    <TableCell>Amount</TableCell>
+                                    <TableCell>Index</TableCell>
+                                    <TableCell>Location</TableCell>
+                                    <TableCell>CreateAt</TableCell>
+                                    <TableCell>UpdateAt</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    indexesChartData.map((d, index) =>
+                                        <TableRow
+                                            key={d.id}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {d.id}
+                                            </TableCell>
+                                            <TableCell>{d.amount}</TableCell>
+                                            <TableCell>{d.index_id}</TableCell>
+                                            <TableCell>{d.sensor_id}</TableCell>
+                                            <TableCell>{moment(d.created_at).format('YYYY/MM/DD hh:mm:ss')}</TableCell>
+                                            <TableCell>{moment(d.updated_at).format('YYYY/MM/DD hh:mm:ss')}</TableCell>
+                                        </TableRow>
+                                    )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </Box>
             </div>
         );

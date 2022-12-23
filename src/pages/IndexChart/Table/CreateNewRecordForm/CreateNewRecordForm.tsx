@@ -12,7 +12,6 @@ import { getAllSensors } from "../../../../service/sensors";
 import "./CreateNewRecordForm.css";
 
 export default function CreateNewRecordForm({ id, handleUpdateRefresh }: { id: number, handleUpdateRefresh: Function }) {
-    // const alert = useAlert();
     const { control, handleSubmit, watch, formState: { errors } } = useForm<IndexSensorsInput>();
     const onSubmit: SubmitHandler<IndexSensorsInput> = async data => {
         let sensor_id = data.sensor_id.value;
@@ -22,7 +21,7 @@ export default function CreateNewRecordForm({ id, handleUpdateRefresh }: { id: n
             sensor_id: sensor_id
         });
         if (response?.id) {
-            alert(`Data Record ${response.id} added successfully \n index_id: ${response?.index_id} \n sensor_id: ${response?.sensor_id}`);
+            alert(`Data Record ${response.id} added successfully \n index_id: ${response?.index_id} \n sensor_id: ${response?.sensor_id}`)
         }
         handleUpdateRefresh();
     }

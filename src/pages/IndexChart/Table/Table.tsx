@@ -20,7 +20,7 @@ import EditRecordForm from './EditRecordForm/EditRecordForm';
 export default function IndexTable({ id }: { id: number }) {
     const [rows, setRows] = useState<IndexSensorsResponse[]>([]);
     const [skip, setSkip] = useState(0);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(0);
     const [editMode, setEditMode] = useState(-1);
     const [updated, setUpdated] = useState(false);
 

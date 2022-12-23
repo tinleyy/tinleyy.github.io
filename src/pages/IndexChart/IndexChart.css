@@ -9,6 +9,8 @@
 
 .grid-item-locationselector{
     width: -webkit-fill-available;
+    max-height: 50vh;
+    overflow: scroll;
 }
 
 .chart-date-font-size-small{

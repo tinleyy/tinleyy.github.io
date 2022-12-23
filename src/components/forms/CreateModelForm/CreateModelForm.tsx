@@ -23,6 +23,7 @@ export default function CreateModelForm() {
     let request = data;
     request.indexes = indexes;
     request.models = models;
+    console.log(request);
     
     const response = await createModel(request);
     if (response?.id) {

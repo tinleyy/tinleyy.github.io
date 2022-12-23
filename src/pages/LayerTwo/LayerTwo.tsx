@@ -9,6 +9,8 @@ import { IndexesResponse } from "../../service/indexes/types";
 import { ModelsResponse } from "../../service/models/types";
 import ModelChart from "../../pages/ModelChart/ModelChart";
 import Pattern from "../../pages/Pattern/Pattern";
+import { indexesInOneChart } from "../../service/general";
+import Relationship from "../../pages/Relationship/Relationship";
 
 export default function Layer2({ mapStorage }: { mapStorage: any }) {
     const [page, setPage] = useState(0);
@@ -20,15 +22,18 @@ export default function Layer2({ mapStorage }: { mapStorage: any }) {
         setPage(num);
     }
 
-    const [details, setDetails] = useState<IndexesResponse | ModelsResponse | null>(null);
-    const handleSwitchToIndexDetails = (details: IndexesResponse | ModelsResponse) => {
-        setDetails(details);
+    const [indexDetails, setIndexDetails] = useState<IndexesResponse>();
+    const [modelDetails, setModelDetails] = useState<ModelsResponse>();
+    const handleSwitchToIndexDetails = (details: IndexesResponse) => {
+        setIndexDetails(details);
         setPage(2);
     }
     const [modelChartData, setModelChartData] = useState<Array<any>>([]);
-    const handleSwitchToModelDetails = (details: IndexesResponse | ModelsResponse, modelChartData: Array<any>) => {
-        setDetails(details);
+    const [indexesInOneChartData, setIndexesInOneChartData] = useState<indexesInOneChart>();
+    const handleSwitchToModelDetails = (details: ModelsResponse, modelChartData: Array<any>, indexesInOneChartData: indexesInOneChart) => {
+        setModelDetails(details);
         setModelChartData(modelChartData);
+        setIndexesInOneChartData(indexesInOneChartData);
         setPage(3);
     }
     const handleBackToHome = () => {
@@ -43,13 +48,16 @@ export default function Layer2({ mapStorage }: { mapStorage: any }) {
         pageContent = <Sensors handleOpenCloseMenu={handleOpenCloseMenu} mapStorage={mapStorage} />
     }
     else if (page === 2) {
-        pageContent = <IndexChart details={details} handleBackToHome={handleBackToHome} />
+        pageContent = <IndexChart details={indexDetails} handleBackToHome={handleBackToHome} />
     }
     else if (page === 3) {
-        pageContent = <ModelChart details={details} modelChartData={modelChartData} handleBackToHome={handleBackToHome} />
+        pageContent = <ModelChart details={modelDetails} modelChartData={modelChartData} indexesInOneChartData={indexesInOneChartData} handleBackToHome={handleBackToHome} />
     }
     else if (page === 4) {
         pageContent = <Pattern handleOpenCloseMenu={handleOpenCloseMenu} />
+    }
+    else if (page === 5) {
+        pageContent = <Relationship handleOpenCloseMenu={handleOpenCloseMenu} />
     }
 
     useEffect(() => {

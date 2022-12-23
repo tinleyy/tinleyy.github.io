@@ -103,7 +103,6 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
                 index_name: formulaIndexName
             }
         ]);
-        handleIndexesChanges(formulaIndexes);
         setFormulaId(formulaId + 1);
     }
     const [formulaModels, setFormulaModels] = useState<Models[]>([]);
@@ -116,7 +115,6 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
                 model_name: formulaModelName
             }
         ]);
-        handleModelsChanges(formulaModels);
         setFormulaId(formulaId + 1);
     }
     const handleClearFormulaIndexes = () => {
@@ -130,6 +128,14 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
         fetchAllIndexes();
         fetchAllModels();
     }, [skip, keyword]);
+
+    useEffect(() => {
+        handleIndexesChanges(formulaIndexes);
+    }, [formulaIndexes]);
+
+    useEffect(() => {
+        handleModelsChanges(formulaModels);
+    }, [formulaModels]);
 
     return (
         <Box sx={{ width: '100%' }}>

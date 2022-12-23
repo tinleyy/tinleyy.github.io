@@ -68,7 +68,7 @@ export default function Menu({ handleChangePage }: { handleChangePage: Function 
                             </List>
                         </Collapse> */}
                         <ListItemLink to="/sensor" onClick={() => handleChangePage(1)} />
-                        <ListItemLink to="/relationship" />
+                        <ListItemLink to="/relationship" onClick={() => handleChangePage(5)} />
                         <ListItemLink to="/pattern" onClick={() => handleChangePage(4)} />
                     </List>
                 </Box>

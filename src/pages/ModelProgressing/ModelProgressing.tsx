@@ -67,6 +67,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
     const [processingIndex, setProcessingIndex] = useState(1);
     const [processingIndexId, setProcessingIndexId] = useState(-1);
     const [indexDetails, setIndexDetails] = useState<IndexesResponse>();
+    const [indexesName, setIndexesName] = useState<Array<any>>([]);
     const [indexRecords, setIndexRecords] = useState<IndexSensorsResponse[]>([]);
     const [indexNoRecords, setIndexNoRecords] = useState(false);
     const [distincts, setDistincts] = useState<Array<any>>([]);
@@ -106,7 +107,12 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                 length += 1;
             }
         })
-        return total / length;
+
+        if (total / length) {
+            return total / length;
+        }
+
+        return 0;
     }
 
     const fetchIndexDetails = async (id: number) => {
@@ -130,28 +136,36 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
     const handleProcessing = () => {
         if (indexes && loading === -1) {
             // set processing index
-            Object.values(indexes).map((d, index) => {
+            let inline_dates: Array<any> = [];
+            Object.values(indexes).map(async (d, index) => {
                 if (d.formula_id === processingIndex) {
                     setProcessingIndexId(d.index_id);
                     fetchIndexDetails(d.index_id);
+                }
+                const records = await getAllIndexSensors(d.index_id, 0, 0);
+                records.map((d, index) => {
+                    const format_date = moment(d.created_at).format('YYYY/MM/DD');
+                    inline_dates.push(format_date);
+                    inline_dates.sort((a, b) => +new Date(a) - +new Date(b))
+                    setDates(Array.from(new Set(inline_dates)));
+                })
+
+                if (index === (Object.values(indexes).length - 1)) {
                     setLoading(0);
                 }
             })
-        } else if (indexRecords.length < 1 && loading === 0) {
+        }
+        else if (indexRecords.length < 1 && loading === 0) {
             fetchIndexRecords();
         } else if (loading === 0 && indexNoRecords) {
             //
         } else if (indexRecords.length >= 1 && loading === 0) {
-            // find number of distincts and dates
+            // find number of distincts
             let distincts: Array<any> = [];
-            let dates: Array<any> = [];
             indexRecords.map((d, index) => {
                 distincts.push(d.sensor_id);
-                const format_date = moment(d.created_at).format('YYYY/MM/DD');
-                dates.push(format_date);
             })
             setDistincts(Array.from(new Set(distincts)));
-            setDates(Array.from(new Set(dates)));
             setLoading(1);
             fetchSensorLocation();
         } else if (sensors.length >= 1 && loading === 1) {
@@ -169,6 +183,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                 let missing = 0;
                 let id = d.sensor_id;
 
+                console.log(dates);
                 dates.map((date, index) => {
                     const find_missing = indexRecords.filter((record, index) => moment(record.created_at).format('YYYY/MM/DD') === date && record.sensor_id === id)[0];
                     if (!find_missing) {
@@ -216,10 +231,17 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
             setLoading(5);
         } else if (loading === 5 && indexes) {
             console.log(indexTotal);
+            
+            const indexName = indexDetails?.name;
+            console.log(indexName);
+            const names = indexesName;
+            names.push(indexName);
+            setIndexesName(names);
+            setLoading(-1);
             // load next index
             if (processingIndex < Object.values(indexes).length) {
+                setIndexRecords([]);
                 setProcessingIndex(processingIndex + 1);
-                setLoading(-1);
             } else {
                 setLoading(6);
             }
@@ -239,10 +261,9 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                 });
                 setProcessFormulaResult(processFormulaResult);
             })
-            setLoading(7);
         }
         else if (loading === 7) {
-            handleSwitchToModelDetails(modelDetails, processFormulaResult);
+            handleSwitchToModelDetails(modelDetails, processFormulaResult, { data: indexTotal, label: dates, labelName: indexesName });
         }
         else {
             console.log("do nothing");
@@ -317,11 +338,16 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                         </Loader>
 
                         <Loader currentLoaded={loading} targetLoaded={5} noRecord={indexNoRecords} finished={0}>
-                            <div className="formula--text">Formula: {modelDetails?.formula}</div>
-                        </Loader>
-
-                        <Loader currentLoaded={loading} targetLoaded={6} noRecord={indexNoRecords} finished={0}>
-                            <></>
+                            <>
+                                <div className="formula--text">Formula: {modelDetails?.formula}</div>
+                                <Grid container
+                                    direction="row"
+                                    justifyContent="flex-end"
+                                    alignItems="center"
+                                    mt={1}>
+                                    <Button variant="contained" className="process-button" onClick={() => setLoading(7)}>GO TO Details</Button>
+                                </Grid>
+                            </>
                         </Loader>
                     </CardContent>
                 </Card>

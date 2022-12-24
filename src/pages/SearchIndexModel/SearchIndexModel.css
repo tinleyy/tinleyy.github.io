@@ -2,11 +2,11 @@
     width: 70%;
     height: 100%;
     position: absolute;
-    background-color: #ffffffe3;
-    border-radius: 0% 5% 5% 0%;
+    background-color: #F2F1F5;
+    border-radius: 0% 3% 3% 0%;
 }
 
-.advance_analysis_button--dark Button{
+.advance_analysis_button--dark Button {
     color: #36464E;
     border-color: #36464E;
 }
@@ -17,7 +17,7 @@
 
 #bottom_results_control_panel {
     height: 65%;
-    background-color:#ECECEC;
+    background-color: #ECECEC;
     border-radius: 0% 0% 5% 0%;
 }
 
@@ -27,4 +27,52 @@
     border-color: #7491AF !important;
     width: -webkit-fill-available !important;
     border-radius: 0.5rem !important;
+}
+
+.tag-chips {
+    background-color: darkgrey !important;
+    color: #fff !important;
+    text-transform: capitalize;
+    border-radius: 10px !important;
+}
+
+.add-tag-chip {
+    color: #fff !important;
+    background-color: black !important;
+}
+
+.refresh-button {
+    background-color: white !important;
+    box-shadow: none !important;
+    border: 0.1rem solid darkgrey !important;
+    color: darkgrey !important;
+}
+
+.refresh-button-icon{
+    display: flex !important;
+}
+
+.refresh-button-icon-animation {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }

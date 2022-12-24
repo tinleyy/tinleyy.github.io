@@ -1,0 +1,9 @@
+.form-error-text {
+    color: crimson;
+    margin-bottom: 1rem;
+    font-size: 0.5rem;
+}
+
+.submit-button {
+    text-align: end;
+}

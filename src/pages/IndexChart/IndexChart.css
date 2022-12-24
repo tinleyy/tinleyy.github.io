@@ -20,12 +20,29 @@
     padding-top: 0px !important;
 }
 
-.chart-date-font-size-small > .left{
-    margin-right: 50px;
-    font-family: monospace;
-    font-size: small;
+.chart-date-font-size-small{
+    font-family: self !important;
+    font-size: small !important;
 }
 
 .chart-date-font-size-small.right{
     margin-left: 50px;
+}
+
+.chart-info-dates{
+    padding-left: 5rem !important;
+}
+
+.toggle-buttons-bar {
+    background-color: rgba(0, 0, 0, 0.10);
+    padding-bottom: 0.5rem;
+}
+
+.css-d9c359-MuiButtonBase-root-MuiToggleButton-root {
+    border: none !important;
+}
+
+.back-to-home-button{
+    color: black !important;
+    border: none !important;
 }

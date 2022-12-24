@@ -49,12 +49,12 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
             <div className="Dashboad">
                 <Box p={2}>
                     <Grid container alignItems="center" spacing={2}>
-                        <Grid item>
+                        <Grid item xs={2} sm={2} md={2} xl={2}>
                             <Button variant="outlined" onClick={() => handleBackToHome()}>
                                 <ArrowLeftIcon />
                             </Button>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={10} sm={10} md={10} xl={10} alignItems="center" justifyItems="center">
                             <h3>{details.name}</h3>
                         </Grid>
                     </Grid>
@@ -91,7 +91,7 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
                                 <Grid item xs={12} sm={6} md={6} xl={6}>
                                     <Card>
                                         <Grid container justifyContent="center">
-                                            <AreaChart data={modelChartData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true }} />
+                                            <AreaChart data={modelChartData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true, legendDisplay: true }} fillArea={false} showLine={true} standard={0}/>
                                         </Grid>
                                         <Grid container justifyContent="center" alignItems="center" spacing={1} mb={2}>
                                             <Grid item className="chart-date-font-size-small">
@@ -106,7 +106,7 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
                                                 <span>{mathData?.lowest}</span>
                                             </Grid>
                                             <Grid item>
-                                                <h5>Medium</h5>
+                                                <h5>Average</h5>
                                                 <span>{mathData?.average}</span>
                                             </Grid>
                                             <Grid item className="chart-date-font-size-small right">
@@ -118,7 +118,7 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
                                 <Grid item xs={12} sm={6} md={6} xl={6}>
                                     <Card>
                                         <Grid container justifyContent="center">
-                                            <MultiLineChart data={indexesInOneChartData} chartOptions={{ scalesYDisplay: true, scalesXDisplay: true, datalabelsDisplay: false }} />
+                                            <MultiLineChart data={indexesInOneChartData} chartOptions={{ scalesYDisplay: true, scalesXDisplay: true, datalabelsDisplay: false, legendDisplay: true }} />
                                         </Grid>
                                     </Card>
                                 </Grid>

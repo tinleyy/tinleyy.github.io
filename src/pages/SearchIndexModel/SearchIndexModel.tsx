@@ -20,6 +20,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CreateTagForm from '../../components/forms/CreateTagForm/CreateTagForm';
 import { getAllTags } from '../../service/tags';
 import { TagsResponse } from '../../service/tags/types';
+import { getLengths, DataLength } from '../../service/global';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 const dataset = [
   {
@@ -52,6 +54,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 'auto',
+  minWidth: '30%',
   bgcolor: 'background.paper',
   borderRadius: 2,
   p: 4,
@@ -92,13 +95,13 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
   const handleSelectIndexModel = (selected: string) => {
     setSelectedCard(selected);
     setSkip(0);
-    setUpdated(true);
+    setUpdated(!updated);
   }
 
   const fetchAllIndexes = async () => {
     if (skip === 0) {
       const data = await getAllIndexes(keyword, 0, null);
-      let total = Math.round(data.length / limit);
+      let total = Math.ceil(data.length / limit);
       setPTotal(total);
     }
     const data = await getAllIndexes(keyword, skip, limit);
@@ -108,7 +111,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
   const fetchAllModels = async () => {
     if (skip === 0) {
       const data = await getAllModels(keyword, 0, null);
-      let total = Math.round(data.length / limit);
+      let total = Math.ceil(data.length / limit);
       setPTotal(total);
     }
     const data = await getAllModels(keyword, skip, limit);
@@ -119,6 +122,12 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
   const fetchAllTags = async () => {
     const data = await getAllTags(keyword, 0, 0);
     setTags(data);
+  }
+
+  const [allItemsLength, setAllItemsLength] = useState<DataLength>();
+  const fetchAllItemsLength = async () => {
+    const data = await getLengths();
+    setAllItemsLength(data);
   }
 
   const handleBasicSearch = async (keyword: string) => {
@@ -159,10 +168,18 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
     }
   }
 
+  const [refresh, setRefresh] = useState(false);
+  const handleRefresh = () => {
+    setRefresh(true);
+    setUpdated(!updated);
+  }
+
   useEffect(() => {
     if (selectedCard === "Index") fetchAllIndexes();
     if (selectedCard === "Model") fetchAllModels();
     fetchAllTags();
+    fetchAllItemsLength();
+    if (refresh) setTimeout(function () { setRefresh(false) }, 3000);
   }, [skip, keyword, selectedCard, updated]);
 
   return (
@@ -181,20 +198,31 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
         </Grid>
 
         <Grid container spacing={2} px={2}>
-          <Grid item>
-            <Chip icon={<AddCircleIcon />} label="Add Tag" variant="outlined" color="primary" onClick={() => handleChangePage(5)} />
+          <Grid item xs={12} sm={11} md={11} xl={11}>
+            <Grid container spacing={2}>
+              <Grid item>
+                <Chip icon={<AddCircleIcon />} label="Add Tag" variant="outlined" color="primary" className="add-tag-chip" onClick={() => handleChangePage(5)} />
+              </Grid>
+              {
+                tags.map((tag, index) =>
+                  <Grid item key={index}>
+                    <Chip label={tag.name} className="tag-chips" />
+                  </Grid>)
+              }
+            </Grid>
           </Grid>
-          {
-            tags.map((tag, index) =>
-              <Grid item key={index}>
-                <Chip label={tag.name} variant="outlined" color="primary" />
-              </Grid>)
-          }
+          <Grid item xs={12} sm={1} md={1} xl={1}>
+            <Button variant="contained" size="small" className="refresh-button" onClick={handleRefresh}>
+              <div className={`refresh-button-icon ${refresh ? "refresh-button-icon-animation" : ""}`}>
+                <AutorenewIcon />
+              </div>
+            </Button>
+          </Grid>
         </Grid>
 
         {/* Display Common Index or Model */}
         <Grid container>
-          <GeneralDisplayPanel data={dataset} selectedCard={selectedCard} handleSelectIndexModel={handleSelectIndexModel} />
+          <GeneralDisplayPanel data={dataset} selectedCard={selectedCard} handleSelectIndexModel={handleSelectIndexModel} allItemsLength={allItemsLength} />
         </Grid>
       </div>
 

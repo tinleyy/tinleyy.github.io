@@ -15,7 +15,7 @@ export default function IndexModelCard({ data, handleDetails, handleDelete, hand
           <Grid container spacing={2}>
             <Grid item xs={12} sm={5} md={5} xl={5}>
               <Typography variant="h6">{data.name}</Typography>
-              <Typography variant="subtitle1">#{data.id}</Typography>
+              <Typography variant="caption">INDEX-ID-0{data.id}</Typography>
               <Typography variant="caption" display="block" className="description">{data.description}</Typography>
             </Grid>
             <Grid item xs={12} sm={7} md={7} xl={7}>
@@ -24,12 +24,14 @@ export default function IndexModelCard({ data, handleDetails, handleDelete, hand
                 <Grid item xs={12} sm={2} md={2} xl={2}><h5>Low</h5></Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2}><h5>Middle</h5></Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2}><h5>High</h5></Grid>
-                <Grid item xs={12} sm={3} md={3} xl={3}><h5>Very High</h5></Grid>
+                <Grid item xs={12} sm={2} md={2} xl={2}><h5>Very High</h5></Grid>
+                <Grid item xs={12} sm={2} md={2} xl={2}><h5>Unit</h5></Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.standard}</Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.low}</Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.middle}</Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.high}</Grid>
-                <Grid item xs={12} sm={3} md={3} xl={3} className="math_content">{data.very_high}</Grid>
+                <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.very_high}</Grid>
+                <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.unit}</Grid>
               </Grid>
             </Grid>
           </Grid>

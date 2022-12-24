@@ -1,7 +1,5 @@
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import * as React from 'react';
-import { Box } from '@mui/material';
 
 export default function ToggleDayTimeButton({ selected, handleChange }: { selected: string, handleChange: any }) {
 

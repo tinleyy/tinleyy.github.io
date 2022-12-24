@@ -15,4 +15,8 @@
 .description {
     font-family: initial !important;
     font-size: 1rem !important;
+    max-height: 8vh;
+    overflow: hidden;
+    white-space: break-spaces;
+    text-overflow: ellipsis;
 }

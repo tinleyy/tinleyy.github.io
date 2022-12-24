@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import LogRocket from 'logrocket';
+
+LogRocket.init('fyp/fyp');
+LogRocket.identify('01', {
+  name: 'test',
+  email: 'test@example.com',
+  subscriptionType: 'admin'
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

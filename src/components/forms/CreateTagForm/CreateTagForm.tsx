@@ -3,6 +3,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { createTag } from "../../../service/tags";
 import { TagsRequest } from "../../../service/tags/types";
 import "./CreateTagForm.css";
+import { Button } from "@mui/material";
 
 export default function CreateTagForm() {
   // const alert = useAlert();
@@ -18,7 +19,7 @@ export default function CreateTagForm() {
   // console.log(watch("name")) // watch input value by passing the name of it
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <h5>Create Tag</h5>
       <div>Name</div>
       <Controller
@@ -39,8 +40,10 @@ export default function CreateTagForm() {
       />
       {/* {errors.description && "Description is required"} */}
 
-      <div>
-        <input type="submit" />
+      <div className="submit-button">
+        <Button onClick={handleSubmit(onSubmit)}>
+          Submit
+        </Button>
       </div>
     </form>
   );

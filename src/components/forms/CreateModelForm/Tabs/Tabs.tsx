@@ -52,15 +52,26 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
     const [indexes, setIndexes] = useState<IndexesResponse[]>([]);
     const [models, setModels] = useState<ModelsResponse[]>([]);
     const [skip, setSkip] = useState(0);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(8);
+    const [skip2, setSkip2] = useState(0);
+    const [limit2, setLimit2] = useState(10);
 
-    // pagination
+    // pagination for Index
     const [keyword, setKeyword] = useState("");
     const [pTotal, setPTotal] = useState(0);
     const [pPage, setPPage] = useState(0);
     const handleChangePPage = (event: React.ChangeEvent<unknown>, value: number) => {
+        console.log("changepage", value);
         setPPage(value);
         setSkip((value - 1) * limit);
+    };
+    // pagination for Model
+    const [keyword2, setKeyword2] = useState("");
+    const [pTotal2, setPTotal2] = useState(0);
+    const [pPage2, setPPage2] = useState(0);
+    const handleChangePPage2 = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPPage2(value);
+        setSkip2((value - 1) * limit);
     };
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -70,7 +81,7 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
     const fetchAllIndexes = async () => {
         if (skip === 0) {
             const data = await getAllIndexes(keyword, 0, null);
-            let total = Math.round(data.length / limit);
+            let total = Math.ceil(data.length / limit);
             setPTotal(total);
         }
         const data = await getAllIndexes(keyword, skip, limit);
@@ -78,18 +89,22 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
     };
 
     const fetchAllModels = async () => {
-        if (skip === 0) {
-            const data = await getAllModels(keyword, 0, null);
-            let total = Math.round(data.length / limit);
-            setPTotal(total);
+        if (skip2 === 0) {
+            const data = await getAllModels(keyword2, 0, null);
+            let total = Math.ceil(data.length / limit2);
+            setPTotal2(total);
         }
-        const data = await getAllModels(keyword, skip, limit);
+        const data = await getAllModels(keyword2, skip2, limit2);
         setModels(data);
     }
 
     const handleBasicSearch = async (keyword: string) => {
         setKeyword(keyword);
         setSkip(0);
+    }
+    const handleModelSearch = async (keyword: string) => {
+        setKeyword2(keyword);
+        setSkip2(0);
     }
 
     const [formulaId, setFormulaId] = useState(0);
@@ -125,9 +140,13 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
     }
 
     useEffect(() => {
+        console.log(skip);
         fetchAllIndexes();
-        fetchAllModels();
     }, [skip, keyword]);
+
+    useEffect(() => {
+        fetchAllModels();
+    }, [skip2, keyword2]);
 
     useEffect(() => {
         handleIndexesChanges(formulaIndexes);
@@ -161,7 +180,7 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
                 <Pagination count={pTotal} page={pPage} onChange={handleChangePPage} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <SearchInputBase onClick={handleBasicSearch} />
+                <SearchInputBase onClick={handleModelSearch} />
                 <Grid container spacing={1} mt={1} mb={1}>
                     {
                         models.map((models, index) => (
@@ -173,6 +192,7 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
                         ))
                     }
                 </Grid>
+                <Pagination count={pTotal2} page={pPage2} onChange={handleChangePPage2} />
             </TabPanel>
             <>
                 {

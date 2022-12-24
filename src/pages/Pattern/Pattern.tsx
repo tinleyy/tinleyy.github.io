@@ -352,7 +352,8 @@ export default function Pattern({ handleOpenCloseMenu }: { handleOpenCloseMenu: 
                                                     <MultiLineChart data={chartData} chartOptions={{
                                                         scalesYDisplay: false,
                                                         scalesXDisplay: false,
-                                                        datalabelsDisplay: false
+                                                        datalabelsDisplay: false, 
+                                                        legendDisplay: true
                                                     }} />
                                                 </CardContent>
                                             </Card>

@@ -13,8 +13,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import "./Relationship.css";
 
 export default function Relationship({ handleOpenCloseMenu }: { handleOpenCloseMenu: Function }) {
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [startDate, setStartDate] = useState("1971-01-01 00:00:00");
+    const [endDate, setEndDate] = useState("2022-12-31 00:00:00");
     const [graphData, setGraphData] = useState<IndexSensorsResponse[]>([]);
     const handleBasicSearch = () => { }
 
@@ -33,20 +33,20 @@ export default function Relationship({ handleOpenCloseMenu }: { handleOpenCloseM
                     </Grid>
                 </Grid>
                 <Grid container spacing={1} p={2}>
-                    <Grid item xs={12} sm={6} md={6} xl={6}>
-                        <h5>Start Date</h5>
+                    <Grid item xs={12} sm={6} md={6} xl={6} className="grid-item-start-date">
+                        <h5 className="grid-item-h5-text">Start Date</h5>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DateTimePicker
                                 className="date-picker"
                                 // label="StartAt"
                                 value={startDate}
-                                onChange={(date) => { }}
+                                onChange={(date) => { setStartDate(date ?? "1971-01-01 00:00:00") }}
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={6} xl={6}>
-                        <h5>End Date</h5>
+                    <Grid item xs={12} sm={6} md={6} xl={6} className="grid-item-end-date">
+                        <h5 className="grid-item-h5-text">End Date</h5>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DateTimePicker
                                 className="date-picker"
@@ -59,7 +59,7 @@ export default function Relationship({ handleOpenCloseMenu }: { handleOpenCloseM
                     </Grid>
                 </Grid>
                 <Grid container height={300} display="flex" justifyContent="center" alignItems="center">
-                    <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true }} />
+                    <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true, legendDisplay: true }} fillArea={false} showLine={true} standard={0}/>
                 </Grid>
 
                 <RelationTabs />

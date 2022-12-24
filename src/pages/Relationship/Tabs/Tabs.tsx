@@ -88,7 +88,7 @@ export default function RelationTabs() {
                                         2020/01/01 - 2022/12/31
                                     </Grid>
                                     <Grid item xs={4} sm={4} md={4} xl={4} className="tab-card-height">
-                                        <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay:false, datalabelsDisplay: false }} />
+                                        <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: false, datalabelsDisplay: false, legendDisplay: false }} fillArea={true} showLine={true} standard={0}/>
                                     </Grid>
                                     <Grid item xs={1} sm={1} md={1} xl={1} display="flex" justifyItems="center" alignItems="center">
                                         <Button color="primary" className="tab-relation-search-button">

@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Button, Grid, IconButton, Modal } from '@mui/material';
+import { Box, Button, Grid, IconButton, Modal, Card, CardContent, CardMedia } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import { useEffect, useState } from 'react';
 import SearchInputBase from '../../components/components/SearchBox';
@@ -10,6 +10,8 @@ import { getAllSensors } from '../../service/sensors';
 import { SensorsResponse } from '../../service/sensors/types';
 import { addMarkerToMap } from '../../utils/GoogleMapsUtils';
 import './Sensor.css';
+import airqualitymonitoringstationIcon from "../../assets/airqualitymonitoringstation.jpg";
+import waterqualitymonitorIcon from "../../assets/waterqualitymonitor.jpg";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -62,7 +64,7 @@ export default function Sensors({ handleOpenCloseMenu, mapStorage }: { handleOpe
   const fetchAllSensors = async () => {
     if (skip === 0) {
       const data = await getAllSensors(keyword, 0, null);
-      let total = Math.round(data.length / limit);
+      let total = Math.ceil(data.length / limit);
       setPTotal(total);
     }
     const data = await getAllSensors(keyword, skip, limit);
@@ -91,6 +93,36 @@ export default function Sensors({ handleOpenCloseMenu, mapStorage }: { handleOpe
           </Grid>
           <Grid item xs={12} sm={7} md={7} xl={7} py={3} pl={3}>
             <SearchInputBase onClick={handleBasicSearch} />
+          </Grid>
+        </Grid>
+
+        <Grid container px={2} spacing={2}>
+          <Grid item>
+            <div>
+              <Card>
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={airqualitymonitoringstationIcon}
+                />
+                <Box px={4} textAlign="center">
+                  <h4>Air Quality <br></br>Monitoring Stations</h4>
+                </Box>
+              </Card>
+            </div>
+          </Grid>
+          
+          <Grid item>
+            <div>
+              <Card>
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={waterqualitymonitorIcon}
+                />
+                <Box px={4} textAlign="center">
+                  <h4>Water Quality <br></br>Monitor</h4>
+                </Box>
+              </Card>
+            </div>
           </Grid>
         </Grid>
       </div>

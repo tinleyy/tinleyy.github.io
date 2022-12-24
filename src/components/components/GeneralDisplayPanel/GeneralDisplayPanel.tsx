@@ -1,7 +1,10 @@
-import { Card, CardContent, Chip, Grid } from '@mui/material';
+import FiberSmartRecordIcon from '@mui/icons-material/FiberSmartRecord';
+import { Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import './GeneralDisplayPanel.css';
+import { DataLength } from '../../../service/global';
 
-export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIndexModel }: { data: any[], selectedCard: string, handleSelectIndexModel: Function }) {
+export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIndexModel, allItemsLength }: { data: any[], selectedCard: string, handleSelectIndexModel: Function, allItemsLength: DataLength | undefined }) {
+  console.log(allItemsLength);
   const dataset = data;
 
   const PanelContent = ({ content }: { content: any[] }) => {
@@ -11,7 +14,7 @@ export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIn
           {content?.map((d, index) => {
             return (
               <Grid item key={index} m={1}>
-                <Chip label={d?.name} />
+                <Chip icon={<FiberSmartRecordIcon />} variant="outlined" className="card-chips" label={d?.name} />
               </Grid>
             );
           })}
@@ -34,7 +37,15 @@ export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIn
                 <CardContent>
                   <Grid container>
                     <Grid item pr={5}>
-                      <h4>{title}</h4>
+                      <h4 style={{ display: title === "Index" ? 'table-cell' : ''}}>{title === "Index"
+                        ? allItemsLength?.index_length
+                        : title === "Model"
+                          ? allItemsLength?.model_length
+                          : ""}&nbsp;{title}</h4>
+                      <Typography variant="caption">
+                        {title === "Index"
+                          ? `${allItemsLength?.record_length} DataRecords` : ""}
+                      </Typography>
                     </Grid>
                     &nbsp;
                     <PanelContent content={content} />

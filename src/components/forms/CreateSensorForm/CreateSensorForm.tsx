@@ -4,6 +4,7 @@ import { createSensor } from "../../../service/sensors";
 import { SensorsRequest } from "../../../service/sensors/types";
 import "./CreateSensorForm.css";
 import { useAlert } from "react-alert";
+import { Button } from "@mui/material";
 
 export default function CreateSensorForm() {
   // const alert = useAlert();
@@ -11,7 +12,7 @@ export default function CreateSensorForm() {
   const onSubmit: SubmitHandler<SensorsRequest> = async data => {
     // console.log(data);
     const response = await createSensor(data);
-    if(response?.id){
+    if (response?.id) {
       alert(`Index ${response.id} created successfully`);
     }
   }
@@ -19,7 +20,7 @@ export default function CreateSensorForm() {
   // console.log(watch("name")) // watch input value by passing the name of it
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <h5>Create Sensor</h5>
       <div>Latitude</div>
       <Controller
@@ -50,8 +51,10 @@ export default function CreateSensorForm() {
         defaultValue=""
       />
 
-      <div>
-        <input type="submit" />
+      <div className="submit-button">
+        <Button onClick={handleSubmit(onSubmit)}>
+          Submit
+        </Button>
       </div>
     </form>
   );

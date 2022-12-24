@@ -5,26 +5,16 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GradientIcon from '@mui/icons-material/Gradient';
 
-export default function ToggleChartButton() {
-  const [alignment, setAlignment] = React.useState('line_chart');
-
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
-  ) => {
-    setAlignment(newAlignment);
-  };
-
+export default function ToggleChartButton({ chartType, handleChartTypeChange }: { chartType: string, handleChartTypeChange: any }) {
   return (
     <ToggleButtonGroup
       color="primary"
-      value={alignment}
+      value={chartType}
       exclusive
-      onChange={handleChange}
+      onChange={handleChartTypeChange}
       aria-label="Platform"
     >
       <ToggleButton value="line_chart"><TimelineIcon /></ToggleButton>
-      <ToggleButton value="heat_map"><GradientIcon /></ToggleButton>
       <ToggleButton value="scatter_chart"><ScatterPlotIcon /></ToggleButton>
     </ToggleButtonGroup>
   );

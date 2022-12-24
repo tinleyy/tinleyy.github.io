@@ -1,6 +1,7 @@
 .tab-relation-search-button{
     border: 0.1rem solid !important;
     border-radius: 20px !important;
+    min-width: auto !important;
 }
 
 .tab-card{

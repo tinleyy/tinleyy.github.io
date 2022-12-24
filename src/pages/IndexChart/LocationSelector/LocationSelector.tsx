@@ -1,15 +1,17 @@
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { getAllSensors } from "../../../service/sensors";
+import "./LocationSelector.css";
 
 interface SelectProps {
     value: number,
-    label: string
+    label: string,
+    name: string
 }
 
 const theme = createTheme({
@@ -17,7 +19,8 @@ const theme = createTheme({
         body1: {
             fontWeight: 500,
             fontSize: "1rem",
-            textAlign: "center"
+            textAlign: "left",
+            paddingLeft: "1rem"
         }
     }
 });
@@ -29,7 +32,7 @@ export default function LocationSelector({ handleLocationSelectorChange }: { han
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
         index: number,
-        sensorId: number|null
+        sensorId: number | null
     ) => {
         setSelectedIndex(index);
         handleLocationSelectorChange(sensorId);
@@ -37,7 +40,7 @@ export default function LocationSelector({ handleLocationSelectorChange }: { han
 
     const fetchSensorLocation = async () => {
         const sensors = await getAllSensors("", 0, 0);
-        const sensors_select_value = sensors.map((sensor, index) => ({ value: sensor.id, label: sensor.distinct }));
+        const sensors_select_value = sensors.map((sensor, index) => ({ value: sensor.id, label: sensor.distinct, name: sensor.remarks }));
         setSensors(sensors_select_value);
     }
 
@@ -66,16 +69,29 @@ export default function LocationSelector({ handleLocationSelectorChange }: { han
                 {
                     sensors.map((sensor, index) => {
                         return (
-                            <ListItem key={index}>
-                                <ListItemButton
-                                    selected={selectedIndex === index}
-                                    onClick={(event) => handleListItemClick(event, index, sensor.value)}
-                                >
-                                    <ListItemText
-                                        primary={`${sensor.label} (${sensor.value})`}
-                                    />
-                                </ListItemButton>
-                            </ListItem>
+                            <div key={index}>
+                                <ListItem>
+                                    <ListItemButton
+                                        selected={selectedIndex === index}
+                                        onClick={(event) => handleListItemClick(event, index, sensor.value)}
+                                    >
+                                        <div>
+                                            <ListItemText
+                                                primary={`${sensor.label}`}
+                                            />
+                                            <ListItemText
+                                                primary={`${sensor.name ?? ""}`}
+                                            />
+                                        </div>
+                                        <ListItemText
+                                            className="list-item-text-sensor-id"
+                                            primary={`Sensor Id: #${sensor.value}`}
+                                        />
+                                    </ListItemButton>
+
+                                </ListItem>
+                                <Divider variant="inset" component="li" />
+                            </div>
                         );
                     })
                 }

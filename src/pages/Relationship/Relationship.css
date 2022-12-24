@@ -1,3 +1,18 @@
-.date-picker{
+.date-picker {
     width: 100%;
 }
+
+.grid-item-start-date {
+    background-color: #fff;
+    padding-bottom: 2vh;
+}
+
+.grid-item-h5-text{
+    margin-bottom: 0.5rem !important;
+}
+
+.grid-item-end-date {
+    background-color: #fff;
+    padding-right: 1vw;
+}
+

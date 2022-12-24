@@ -1,22 +1,20 @@
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
-import { Box, Button, Grid, Card, CardContent } from "@mui/material";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { IndexesResponse } from "../../service/indexes/types";
-import { ModelsResponse } from "../../service/models/types";
+import { getIndexsensorsGraphdata } from "../../service/indexsensors";
+import { IndexSensorsResponse, MathResponse } from "../../service/indexsensors/types";
 import { AreaChart } from "../../utils/Charts/AreaChart";
+import "./IndexChart.css";
+import LocationSelector from "./LocationSelector/LocationSelector";
 import IndexTable from "./Table/Table";
 import ToggleChartButton from "./ToggleChartButton/ToggleChartButton";
 import ToggleDayTimeButton from "./ToggleDayTimeButton/ToggleDayTimeButton";
-import LocationSelector from "./LocationSelector/LocationSelector";
-import { Typography } from "@mui/material";
-import "./IndexChart.css";
-import { useEffect, useState } from "react";
-import { getIndexsensorsGraphdata } from "../../service/indexsensors";
-import { MathResponse, IndexSensorsResponse } from "../../service/indexsensors/types";
-import moment from "moment";
+import ToggleMoreButton from "./ToggleMoreButton/ToggleMoreButton";
 
 export default function IndexChart({ details, handleBackToHome }: { details: IndexesResponse | undefined, handleBackToHome: Function }) {
-    const [startDate, setStartDate] = useState("2000-01-01 00:00:00");
+    const [startDate, setStartDate] = useState("1972-01-01 00:00:00");
     const [endDate, setEndDate] = useState("2022-12-31 23:59:59");
     const [graphData, setGraphData] = useState<IndexSensorsResponse[]>([]);
     const [mathData, setMathData] = useState<MathResponse | null>();
@@ -27,9 +25,22 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
         setGraphData(data.data);
         setMathData(data.math);
         setUpdated(false);
+
+        setShowLine(true);
+        setChartType('line_chart');
+        if (sensorId !== -1 && sensorId !== null) {
+            setFillArea(true);
+            setDatalabelsDisplay(true);
+        } else {
+            setFillArea(false);
+            setDatalabelsDisplay(false);
+        }
     };
 
     const [selectedDayTime, setSelectedDayTime] = useState('All');
+    const [fillArea, setFillArea] = useState(false);
+    const [showLine, setShowLine] = useState(true);
+    const [datalabelsDisplay, setDatalabelsDisplay] = useState(false);
     const handleDayTimeChange = (
         event: React.MouseEvent<HTMLElement>,
         newSelected: string,
@@ -76,6 +87,20 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
         setUpdated(true);
     };
 
+    const [chartType, setChartType] = useState('line_chart');
+    const handleChartTypeChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newChartType: string,
+    ) => {
+        if (newChartType === "scatter_chart") {
+            setShowLine(false);
+            setFillArea(false);
+        }
+        else if (newChartType === "line_chart") {
+            setShowLine(true);
+        }
+        setChartType(newChartType);
+    };
 
     useEffect(() => {
         if (updated) {
@@ -86,10 +111,10 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
     if (details) {
         return (
             <div className="Dashboad">
-                <Box p={2}>
-                    <Grid container alignItems="center" spacing={2}>
+                <Box py={2}>
+                    <Grid container alignItems="center" spacing={2} mb={1}>
                         <Grid item>
-                            <Button variant="outlined" onClick={() => handleBackToHome()}>
+                            <Button variant="outlined" onClick={() => handleBackToHome()} className="back-to-home-button">
                                 <ArrowLeftIcon />
                             </Button>
                         </Grid>
@@ -100,56 +125,49 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
 
                     <Grid container spacing={1} justifyItems="center" mb={1}>
                         <Grid item xs={12} sm={9} md={9} xl={9}>
-                            <Grid container justifyContent="center" spacing={1} mb={1}>
+                            <div>
                                 <Card>
-                                    <Box px={2} pb={1}>
-                                        <h5>Toolbar</h5>
-                                        <Grid container spacing={1} justifyContent="center" alignItems="center">
-                                            <Grid item>
-                                                <ToggleDayTimeButton selected={selectedDayTime} handleChange={handleDayTimeChange} />
-                                            </Grid>
-                                            <Grid item>
-                                                <ToggleChartButton />
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" className="toolbar_button sigma">
-                                                    +2 Sigma
-                                                </Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" className="toolbar_button normaldis">
-                                                    Normal Distribution
-                                                </Button>
-                                            </Grid>
+                                    <Grid container justifyContent="center" alignItems="center" spacing={1} mb={2}>
+                                        <Grid item xs={12} sm={4} md={4} xl={4} className="chart-info-dates">
+                                            <h5>Start Date</h5>
+                                            <Typography className="left chart-date-font-size-small">{startDate}</Typography>
                                         </Grid>
-                                    </Box>
+                                        <Grid item xs={12} sm={1} md={1} xl={1}>
+                                            <h5>Highest</h5>
+                                            <span>{mathData?.highest}</span>
+                                        </Grid>
+                                        <Grid item xs={12} sm={1} md={1} xl={1}>
+                                            <h5>Lowest</h5>
+                                            <span>{mathData?.lowest}</span>
+                                        </Grid>
+                                        <Grid item xs={12} sm={1} md={1} xl={1}>
+                                            <h5>Average</h5>
+                                            <span>{mathData?.average}</span>
+                                        </Grid>
+                                        <Grid item xs={12} sm={4} md={4} xl={4} className="chart-info-dates">
+                                            <h5>End Date</h5>
+                                            <Typography className="left chart-date-font-size-small">{endDate}</Typography>
+                                        </Grid>
+                                    </Grid>
                                 </Card>
-                            </Grid>
-
+                            </div>
                             <Card>
-                                <Grid container height={300} justifyContent="center">
-                                    <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true }} />
-                                </Grid>
-                                <Grid container justifyContent="center" alignItems="center" spacing={2} mb={2}>
-                                    <Grid item className="chart-date-font-size-small">
-                                        <Typography className="left">{startDate}</Typography>
+                                <Box p={2} pb={1}>
+                                    <Grid container spacing={1} justifyContent="center" alignItems="center" className="toggle-buttons-bar">
+                                        <Grid item xs={3} sm={3} md={3} xl={3}>
+                                            <ToggleChartButton chartType={chartType} handleChartTypeChange={handleChartTypeChange} />
+                                        </Grid>
+                                        <Grid item xs={6} sm={6} md={6} xl={6}>
+                                            <ToggleDayTimeButton selected={selectedDayTime} handleChange={handleDayTimeChange} />
+                                        </Grid>
+                                        <Grid item xs={3} sm={3} md={3} xl={3}>
+                                            <ToggleMoreButton />
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
-                                        <h5>Highest</h5>
-                                        <span>{mathData?.highest}</span>
+                                    <Grid container height={300} justifyContent="center">
+                                        <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: datalabelsDisplay, legendDisplay: true }} fillArea={fillArea} showLine={showLine} standard={details?.standard} />
                                     </Grid>
-                                    <Grid item>
-                                        <h5>Lowest</h5>
-                                        <span>{mathData?.lowest}</span>
-                                    </Grid>
-                                    <Grid item>
-                                        <h5>Medium</h5>
-                                        <span>{mathData?.average}</span>
-                                    </Grid>
-                                    <Grid item className="chart-date-font-size-small right">
-                                        {endDate}
-                                    </Grid>
-                                </Grid>
+                                </Box>
                             </Card>
                         </Grid>
 

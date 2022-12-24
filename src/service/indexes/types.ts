@@ -7,6 +7,7 @@ export interface IndexesResponse {
     middle: number,
     high: number,
     very_high: number,
+    unit: string,
     hidden: boolean,
     created_at: Date,
     updated_at: Date
@@ -20,6 +21,7 @@ export interface IndexesRequest {
     middle: number,
     high: number,
     very_high: number,
+    unit: string,
     hidden: boolean
 }
 

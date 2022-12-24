@@ -5,6 +5,7 @@ import { createModel } from "../../../service/models";
 import { ModelsRequest } from "../../../service/models/types";
 import "./CreateModelForm.css";
 import BasicTabs from "./Tabs/Tabs";
+import { Button } from "@mui/material";
 
 export default function CreateModelForm() {
   // const alert = useAlert();
@@ -24,7 +25,7 @@ export default function CreateModelForm() {
     request.indexes = indexes;
     request.models = models;
     console.log(request);
-    
+
     const response = await createModel(request);
     if (response?.id) {
       alert(`Model ${response.id} created successfully`);
@@ -34,7 +35,7 @@ export default function CreateModelForm() {
   // console.log(watch("name")) // watch input value by passing the name of it
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <h5>Create Model</h5>
       <div>Name</div>
       <Controller
@@ -66,8 +67,10 @@ export default function CreateModelForm() {
       />
       {errors.formula && "formula is required"}
 
-      <div>
-        <input type="submit" />
+      <div className="submit-button">
+        <Button onClick={handleSubmit(onSubmit)}>
+          Submit
+        </Button>
       </div>
     </form>
   );

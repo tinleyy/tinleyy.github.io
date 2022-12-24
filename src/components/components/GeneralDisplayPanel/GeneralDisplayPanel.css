@@ -6,3 +6,7 @@
 .can--select{
     cursor: pointer;
 }
+
+.card-chips{
+    border-radius: 10px !important;
+}

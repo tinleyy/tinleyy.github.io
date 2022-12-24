@@ -48,7 +48,7 @@ export default function IndexTable({ id }: { id: number }) {
     }, [updated, rows]);
 
     return (
-        <TableContainer component={Paper} sx={{ maxHeight: '30vh' }}>
+        <TableContainer component={Paper} sx={{ maxHeight: '30vh', bottom: 0, position: "absolute" }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>

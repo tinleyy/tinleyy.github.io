@@ -8,4 +8,5 @@ export type chartOptions = {
     scalesYDisplay: boolean,
     scalesXDisplay: boolean,
     datalabelsDisplay: boolean
+    legendDisplay: boolean
 }

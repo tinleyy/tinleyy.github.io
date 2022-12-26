@@ -12,6 +12,7 @@ import IndexTable from "./Table/Table";
 import ToggleChartButton from "./ToggleChartButton/ToggleChartButton";
 import ToggleDayTimeButton from "./ToggleDayTimeButton/ToggleDayTimeButton";
 import ToggleMoreButton from "./ToggleMoreButton/ToggleMoreButton";
+import HeatMap from "./HeapMap/HeapMeap";
 
 export default function IndexChart({ details, handleBackToHome }: { details: IndexesResponse | undefined, handleBackToHome: Function }) {
     const [startDate, setStartDate] = useState("1972-01-01 00:00:00");
@@ -165,7 +166,31 @@ export default function IndexChart({ details, handleBackToHome }: { details: Ind
                                         </Grid>
                                     </Grid>
                                     <Grid container height={300} justifyContent="center">
-                                        <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: datalabelsDisplay, legendDisplay: true }} fillArea={fillArea} showLine={showLine} standard={details?.standard} />
+                                        {
+                                            chartType === "heatmap_chart" ?
+                                                <div>
+                                                    <HeatMap/>
+                                                    <Grid container spacing={1} pt={2} justifyContent="center">
+                                                        <Grid item textAlign="right">
+                                                            <Box className="heat-map-color-box heat-map-color-box-0-low">&nbsp;</Box>
+                                                            {details?.low}
+                                                        </Grid>
+                                                        <Grid item textAlign="right">
+                                                            <Box className="heat-map-color-box heat-map-color-box-low-middle">&nbsp;</Box>
+                                                            {details?.middle}
+                                                        </Grid>
+                                                        <Grid item textAlign="right">
+                                                            <Box className="heat-map-color-box heat-map-color-box-middle-high">&nbsp;</Box>
+                                                            {details?.high}
+                                                        </Grid>
+                                                        <Grid item textAlign="right">
+                                                            <Box className="heat-map-color-box heat-map-color-box-high-veryhigh">&nbsp;</Box>
+                                                            {details?.very_high}
+                                                        </Grid>
+                                                    </Grid>
+                                                </div>
+                                                : <AreaChart data={graphData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: datalabelsDisplay, legendDisplay: true }} fillArea={fillArea} showLine={showLine} standard={details?.standard} showHighestBox={true}/>
+                                        }
                                     </Grid>
                                 </Box>
                             </Card>

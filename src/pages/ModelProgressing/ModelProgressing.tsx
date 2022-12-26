@@ -1,5 +1,6 @@
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { Box, Button, Card, CardContent, Chip, Grid, Typography } from "@mui/material";
+import moment from 'moment';
 import { useEffect, useState } from "react";
 import { ProgressBar } from 'react-loader-spinner';
 import { getOneIndex } from "../../service/indexes";
@@ -12,14 +13,18 @@ import { SensorsResponse } from "../../service/sensors/types";
 import { getAverage, getMedian, getStandardDeviation, processFormula } from "../../utils/Math/Math";
 import "./ModelProgressing.css";
 import SelectCheckBox from "./SelectCheckBox/SelectCheckBox";
-import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
-import moment from 'moment';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Title = () => {
     return (
         <>
-            <h5>Auto Complete</h5>
-            <>Description Image</>
+            <Button color="inherit">
+                <DoneAllIcon />
+                Auto Complete
+            </Button>
+            <Button style={{ float: 'right' }}>
+                <InfoIcon />
+            </Button>
         </>
     );
 }
@@ -72,6 +77,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
     const [indexNoRecords, setIndexNoRecords] = useState(false);
     const [distincts, setDistincts] = useState<Array<any>>([]);
     const [dates, setDates] = useState<Array<any>>([]);
+    const [allDistricts, setAllDistricts] = useState<Array<any>>([]);
     const [sensors, setSensors] = useState<SensorsResponse[]>([]);
     const [selectAllChecked, setSelectAllChecked] = useState(true);
     const [selectDistinctChecked, setSelectDistinctChecked] = useState([true, true]);
@@ -137,6 +143,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
         if (indexes && loading === -1) {
             // set processing index
             let inline_dates: Array<any> = [];
+            let inline_district: Array<any> = [];
             Object.values(indexes).map(async (d, index) => {
                 if (d.formula_id === processingIndex) {
                     setProcessingIndexId(d.index_id);
@@ -148,6 +155,9 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                     inline_dates.push(format_date);
                     inline_dates.sort((a, b) => +new Date(a) - +new Date(b))
                     setDates(Array.from(new Set(inline_dates)));
+
+                    inline_district.push(d.sensor_id);
+                    setAllDistricts(Array.from(new Set(inline_district)));
                 })
 
                 if (index === (Object.values(indexes).length - 1)) {
@@ -183,7 +193,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                 let missing = 0;
                 let id = d.sensor_id;
 
-                console.log(dates);
+                // console.log(dates);
                 dates.map((date, index) => {
                     const find_missing = indexRecords.filter((record, index) => moment(record.created_at).format('YYYY/MM/DD') === date && record.sensor_id === id)[0];
                     if (!find_missing) {
@@ -230,10 +240,10 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
             setIndexTotal(prevState => ({ ...prevState, [processingIndex]: thisIndexTotal }));
             setLoading(5);
         } else if (loading === 5 && indexes) {
-            console.log(indexTotal);
-            
+            // console.log(indexTotal);
+
             const indexName = indexDetails?.name;
-            console.log(indexName);
+            // console.log(indexName);
             const names = indexesName;
             names.push(indexName);
             setIndexesName(names);
@@ -250,14 +260,14 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
 
             dates.map((date, index) => {
                 let indexList: Array<any> = [];
-                console.log("Processing date" + (index + 1));
+                // console.log("Processing date" + (index + 1));
                 Object.values(indexes).map((d) => {
                     indexList[d.formula_id - 1] = indexTotal[d.formula_id][index]
                 })
                 const result = processFormula(formula ?? "", indexList);
                 processFormulaResult.push({
                     amount: result,
-                    created_at: date
+                    created_at: moment(date).format("YYYY-DD-MM 00:00:00")
                 });
                 setProcessFormulaResult(processFormulaResult);
             })
@@ -266,7 +276,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
             handleSwitchToModelDetails(modelDetails, processFormulaResult, { data: indexTotal, label: dates, labelName: indexesName });
         }
         else {
-            console.log("do nothing");
+            // console.log("do nothing");
         }
     }
 
@@ -283,44 +293,63 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                 <Title />
                 <Card>
                     <CardContent>
-                        <h5>{Object.values(indexes).length} Indexes Found</h5>
-                        <div className="text--light">Index {processingIndex} <div className="index-name">&nbsp; {indexDetails?.name}</div></div>
+                        <h5>{Object.values(indexes).length} Indexes Found In Model {modelDetails?.name}</h5>
 
                         <Loader currentLoaded={loading} targetLoaded={0} noRecord={indexNoRecords} finished={0}>
                             <>
                                 <Box p={1} m={1} className="data-found--box" display="flex" justifyItems="center" alignItems="center">
-                                    <LocationOnIcon />&nbsp;{distincts.length} Distinct Found
+                                    <Grid container ml={1} spacing={1} alignItems="center">
+                                        <Grid item mr={1}>
+                                            <h5>&nbsp;{allDistricts.length} Districts Found</h5>
+                                        </Grid>
+                                        {
+                                            sensors.length >= 1 ? allDistricts.map((d, index) => {
+                                                const s = sensors.filter((sensor, i) => sensor.id === d)[0];
+                                                return (
+                                                    <Grid item key={index}><Chip label={s.distinct} className="custom-chips" /></Grid>
+                                                );
+                                            }) : <></>
+                                        }
+                                    </Grid>
                                 </Box>
                                 <Box p={1} m={1} className="data-found--box">
-                                    <Box p={1} m={1} className="data-found--box" display="flex" justifyItems="center" alignItems="center">
-                                        <InsertInvitationIcon />&nbsp;{dates.length} Date Found
-                                    </Box>
-
-                                    <Grid container ml={1} spacing={1}>
+                                    <Grid container ml={1} spacing={1} alignItems="center">
+                                        <Grid item mr={1}>
+                                            <h5>&nbsp;{dates.length} Dates Found</h5>
+                                        </Grid>
                                         {
-                                            dates.map((date, index) => <Grid item><Chip label={moment(date).format('YYYY/MM/DD')} /></Grid>)
+                                            dates.map((date, index) => <Grid item key={index}><Chip label={moment(date).format('YYYY/MM/DD')} className="custom-chips" /></Grid>)
                                         }
                                     </Grid>
                                 </Box>
                             </>
                         </Loader>
 
+                    </CardContent>
+                    <div style={{ backgroundColor: "whitesmoke" }}>
+                        <Box p={1} className="index-name">&nbsp; {indexDetails?.name} &nbsp; Index %{processingIndex}</Box>
+
                         <Loader currentLoaded={loading} targetLoaded={1} noRecord={indexNoRecords} finished={0}>
-                            <Box mb={3}>
+                            <Box p={2}>
                                 <Grid container
                                     direction="row"
                                     justifyContent="flex-end"
                                     alignItems="center">
                                     <SelectCheckBox label="SELECT ALL" checked={selectAllChecked} handleOnChange={handleSelectAllChange} />
                                 </Grid>
-                                <Grid container spacing={3} px={2}>
+                                <Grid container
+                                    display="flex"
+                                    columnGap={1}
+                                    rowGap={1}>
                                     {
                                         distincts.map((d, index) => (
                                             <Grid item key={index}>
-                                                <SelectCheckBox label="" checked={selectDistinctChecked[index]} handleOnChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelectDistinctChange(e, index)} />
-                                                <Typography variant="caption">Sensor ID: {d?.sensor_id}</Typography>
-                                                <Typography variant="h6">{d?.name}</Typography>
-                                                <Chip label={"Missing: " + d?.missing} variant="outlined" />
+                                                <Card style={{ padding: '1rem' }}>
+                                                    <SelectCheckBox label="" checked={selectDistinctChecked[index]} handleOnChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelectDistinctChange(e, index)} />
+                                                    <Typography variant="caption">Sensor ID: {d?.sensor_id}</Typography>
+                                                    <Typography variant="h6">{d?.name}</Typography>
+                                                    <Chip label={"Missing " + d?.missing + " dates"} />
+                                                </Card>
                                             </Grid>
                                         ))
                                     }
@@ -332,7 +361,8 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                                 direction="row"
                                 justifyContent="flex-end"
                                 alignItems="center"
-                                mt={1}>
+                                mt={1}
+                                p={2}>
                                 <Button variant="contained" className="process-button" onClick={() => setLoading(4)}>Process</Button>
                             </Grid>
                         </Loader>
@@ -349,7 +379,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                                 </Grid>
                             </>
                         </Loader>
-                    </CardContent>
+                    </div>
                 </Card>
             </>
         );

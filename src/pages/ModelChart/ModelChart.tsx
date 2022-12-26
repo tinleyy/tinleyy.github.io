@@ -24,25 +24,29 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
     const [endDate, setEndDate] = useState("2022-12-31 23:59:59");
     const [graphData, setGraphData] = useState<IndexSensorsResponse[]>([]);
     const [mathData, setMathData] = useState<MathResponse | null>();
+    const [updated, setUpdated] = useState(false);
 
     const [indexesChartData, setIndexesChartData] = useState<Array<any>>([]);
     const fetchIndexesInChart = () => {
         const indexes = details?.indexes;
-        console.log(indexes);
         if (indexes) {
-            const currentData = indexesChartData;
             Object.values(indexes).map(async (d, index) => {
                 const data = await getIndexsensorsGraphdata(d.index_id, null, startDate, endDate);
-                data?.data.map((d, index) => currentData.push(d))
-                setIndexesChartData(currentData);
+                data?.data.map((d) => {
+                    setIndexesChartData(prevState => [...prevState, d]);
+                })
+                setUpdated(!updated);
             });
         }
     }
 
     useEffect(() => {
-        // console.log(indexesInOneChartData);
         fetchIndexesInChart();
-    }, [indexesChartData]);
+    }, []);
+
+    useEffect(() => {
+        console.log(indexesChartData);
+    }, [updated]);
 
     if (details) {
         return (
@@ -61,7 +65,7 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
 
                     <Grid container spacing={1} justifyItems="center" mb={1}>
                         <Grid item xs={12} sm={12} md={12} xl={12}>
-                            <Grid container justifyContent="center" spacing={1} mb={1}>
+                            {/* <Grid container justifyContent="center" spacing={1} mb={1}>
                                 <Card>
                                     <Box px={2} pb={1}>
                                         <h5>Toolbar</h5>
@@ -85,39 +89,19 @@ export default function ModelChart({ details, modelChartData, indexesInOneChartD
                                         </Grid>
                                     </Box>
                                 </Card>
-                            </Grid>
+                            </Grid> */}
 
                             <Grid container spacing={1}>
                                 <Grid item xs={12} sm={6} md={6} xl={6}>
                                     <Card>
-                                        <Grid container justifyContent="center">
-                                            <AreaChart data={modelChartData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: true, legendDisplay: true }} fillArea={false} showLine={true} standard={0}/>
-                                        </Grid>
-                                        <Grid container justifyContent="center" alignItems="center" spacing={1} mb={2}>
-                                            <Grid item className="chart-date-font-size-small">
-                                                <Typography className="left">{startDate}</Typography>
-                                            </Grid>
-                                            <Grid item>
-                                                <h5>Highest</h5>
-                                                <span>{mathData?.highest}</span>
-                                            </Grid>
-                                            <Grid item>
-                                                <h5>Lowest</h5>
-                                                <span>{mathData?.lowest}</span>
-                                            </Grid>
-                                            <Grid item>
-                                                <h5>Average</h5>
-                                                <span>{mathData?.average}</span>
-                                            </Grid>
-                                            <Grid item className="chart-date-font-size-small right">
-                                                {endDate}
-                                            </Grid>
+                                        <Grid container justifyContent="center" p={2}>
+                                            <AreaChart data={modelChartData} chartOptions={{ scalesYDisplay: false, scalesXDisplay: true, datalabelsDisplay: false, legendDisplay: false }} fillArea={false} showLine={true} standard={0} showHighestBox={false} />
                                         </Grid>
                                     </Card>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} xl={6}>
                                     <Card>
-                                        <Grid container justifyContent="center">
+                                        <Grid container justifyContent="center" p={2}>
                                             <MultiLineChart data={indexesInOneChartData} chartOptions={{ scalesYDisplay: true, scalesXDisplay: true, datalabelsDisplay: false, legendDisplay: true }} />
                                         </Grid>
                                     </Card>

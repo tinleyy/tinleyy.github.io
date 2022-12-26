@@ -2,6 +2,7 @@ import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material
 import { IndexesResponse } from '../../../service/indexes/types';
 import { ModelsResponse } from '../../../service/models/types';
 import './IndexModelCard.css';
+import InfoIcon from '@mui/icons-material/Info';
 
 function instanceOfIndexes(data: any): data is IndexesResponse {
   return 'standard' in data;
@@ -25,7 +26,16 @@ export default function IndexModelCard({ data, handleDetails, handleDelete, hand
                 <Grid item xs={12} sm={2} md={2} xl={2}><h5>Middle</h5></Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2}><h5>High</h5></Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2}><h5>Very High</h5></Grid>
-                <Grid item xs={12} sm={2} md={2} xl={2}><h5>Unit</h5></Grid>
+                <Grid item xs={12} sm={2} md={2} xl={2}>
+                  <Grid container>
+                    <Grid item display="flex" alignItems="center" mr={1}>
+                      <InfoIcon />
+                    </Grid>
+                    <Grid item>
+                      <h5>Unit</h5>
+                    </Grid>
+                  </Grid>
+                </Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.standard}</Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.low}</Grid>
                 <Grid item xs={12} sm={2} md={2} xl={2} className="math_content">{data.middle}</Grid>

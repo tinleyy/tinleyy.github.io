@@ -7,19 +7,32 @@
     background-color: #4B4BF9 !important;
 }
 
-.formula--text{
-    background-color: chocolate;
-    color: white;
-    padding: inherit;
-    font-weight: 700;
+.formula--text {
+    background-color: white;
+    color: black;
+    font-family: serif;
+    text-align: center;
+    padding: 1vh;
 }
 
-.text--light{
+.text--light {
     font-weight: 300;
 }
 
-.data-found--box{
+.data-found--box {
     border-radius: 5px;
-    border: 0.1rem solid;
+    /* border: 0.1rem solid; */
     color: grey;
+    background-color: ghostwhite;
+}
+
+.css-ahj2mt-MuiTypography-root,
+.selectbox-text-select-all {
+    font-weight: 500 !important;
+    font-size: 0.5rem !important;
+    color: black;
+}
+
+.custom-chips {
+    border-radius: 5px;
 }

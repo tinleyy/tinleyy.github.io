@@ -1,18 +1,16 @@
 import {
-  CategoryScale, Chart as ChartJS, Filler,
-  Legend, LinearScale, LineElement, PointElement, Title,
-  Tooltip,
-  TimeScale,
-  ChartOptions
+  CategoryScale, Chart as ChartJS, ChartOptions, Filler,
+  Legend, LinearScale, LineElement, PointElement, TimeScale, Title,
+  Tooltip
 } from 'chart.js';
-import { de } from "date-fns/locale";
+import "chartjs-adapter-date-fns";
+import annotationPlugin from 'chartjs-plugin-annotation';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { de } from "date-fns/locale";
+import moment from "moment";
 import { Line } from 'react-chartjs-2';
 import { chartOptions } from "../../service/general";
 import { IndexSensorsResponse } from "../../service/indexsensors/types";
-import annotationPlugin from 'chartjs-plugin-annotation';
-import "chartjs-adapter-date-fns";
-import moment from "moment";
 
 ChartJS.register(
   CategoryScale,
@@ -34,7 +32,7 @@ function average(ctx: any) {
   return values.reduce((a, b) => a + b, 0) / values.length;
 }
 
-function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xMin, yMin, yMax, standard }: { options: chartOptions, firstdatedatalabel: Array<any>, lastdatedatalabel: Array<any>, xMax: number, xMin: number, yMin: number, yMax: number, standard: number }) {
+function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xMin, yMin, yMax, standard, showHighestBox }: { options: chartOptions, firstdatedatalabel: Array<any>, lastdatedatalabel: Array<any>, xMax: number, xMin: number, yMin: number, yMax: number, standard: number, showHighestBox: boolean }) {
   const option: ChartOptions<"line"> = {
     responsive: true,
     plugins: {
@@ -87,6 +85,7 @@ function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xM
       annotation: {
         annotations: {
           box1: {
+            display: showHighestBox,
             type: 'box',
             xMin: xMin,
             xMax: xMax,
@@ -95,6 +94,7 @@ function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xM
             backgroundColor: 'rgba(255, 99, 132, 0.25)'
           },
           line1: {
+            display: standard === 0 ? false : true,
             type: 'line',
             yMin: standard,
             yMax: standard,
@@ -102,6 +102,7 @@ function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xM
             borderWidth: 2,
           },
           line2: {
+            display: standard === 0 ? false : true,
             type: 'line',
             borderColor: 'black',
             borderDash: [6, 6],
@@ -111,6 +112,7 @@ function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xM
             value: (ctx) => average(ctx)
           },
           label1: {
+            display: standard === 0 ? false : true,
             type: 'label',
             // xValue: xMax,
             yValue: standard,
@@ -178,13 +180,14 @@ function mapToChartData({ labels, data, fillArea, showLine }: { labels: Array<an
 }
 
 const colors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
-export function AreaChart({ data, chartOptions, fillArea, showLine, standard }: { data: IndexSensorsResponse[] | Array<any>, chartOptions: chartOptions, fillArea: boolean, showLine: boolean, standard: number }) {
+export function AreaChart({ data, chartOptions, fillArea, showLine, standard, showHighestBox }: { data: IndexSensorsResponse[] | Array<any>, chartOptions: chartOptions, fillArea: boolean, showLine: boolean, standard: number, showHighestBox: boolean }) {
   let amount: Array<any> = [];
   let highestamount: Array<any> = [];
   let label: Array<any> = [];
   let sorted_label: Array<any> = [];
   let firstdatedatalabel: Array<any> = [];
   let lastdatedatalabel: Array<any> = [];
+
   data.map((d, index) => {
     amount.push(d.amount);
     highestamount.push(d.amount);
@@ -193,21 +196,23 @@ export function AreaChart({ data, chartOptions, fillArea, showLine, standard }: 
     sorted_label.push(d.created_at);
   })
 
-  sorted_label.sort((a, b) => +new Date(a) - +new Date(b))
-  sorted_label = Array.from(new Set(sorted_label))
-  highestamount.sort((a, b) => b - a)
   let highestamountdate = ""
-  data.map((d, index) => {
-    if (d.created_at === sorted_label[0]) {
-      firstdatedatalabel.push(index);
-    } else if (d.created_at === sorted_label[sorted_label.length - 1]) {
-      lastdatedatalabel.push(index);
-    }
+  sorted_label.sort((a, b) => +new Date(a) - +new Date(b))
+    sorted_label = Array.from(new Set(sorted_label))
+    highestamount.sort((a, b) => b - a)
 
-    if (d.amount === highestamount[0]) {
-      highestamountdate = d.created_at;
-    }
-  })
+    data.map((d, index) => {
+      if (d.created_at === sorted_label[0]) {
+        firstdatedatalabel.push(index);
+      } else if (d.created_at === sorted_label[sorted_label.length - 1]) {
+        lastdatedatalabel.push(index);
+      }
+  
+      if (d.amount === highestamount[0]) {
+        highestamountdate = d.created_at;
+      }
+    })
+  
   const xMax = (parseInt(moment(highestamountdate).format('YYYY')) - 1971 + 1) * 31556952000 + 4665600000;
   const xMin = xMax - 4665600000 - 4665600000;
 
@@ -220,7 +225,8 @@ export function AreaChart({ data, chartOptions, fillArea, showLine, standard }: 
     xMin: xMin,
     yMin: highestamount[0] - 30,
     yMax: highestamount[0] + 30,
-    standard: standard
+    standard: standard,
+    showHighestBox: showHighestBox
   });
 
   return <Line options={options} data={chartdata} />;

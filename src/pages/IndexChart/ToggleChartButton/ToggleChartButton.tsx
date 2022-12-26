@@ -16,6 +16,7 @@ export default function ToggleChartButton({ chartType, handleChartTypeChange }: 
     >
       <ToggleButton value="line_chart"><TimelineIcon /></ToggleButton>
       <ToggleButton value="scatter_chart"><ScatterPlotIcon /></ToggleButton>
+      <ToggleButton value="heatmap_chart"><GradientIcon /></ToggleButton>
     </ToggleButtonGroup>
   );
 }

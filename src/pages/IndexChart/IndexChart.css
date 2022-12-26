@@ -46,3 +46,38 @@
     color: black !important;
     border: none !important;
 }
+
+.heat-map-color-box{
+    width: 5vw;
+}
+
+.heat-map-color-box-no-data{
+    min-width: 0.5vw;
+    border: 1px solid black;
+}
+
+.heat-map-color-box-0-low{
+    background-color: #98FB98;
+}
+
+.heat-map-color-box-low-middle{
+    background-color: #90EE90;
+}
+
+.heat-map-color-box-middle-high{
+    background-color: #32CD32;
+}
+
+.heat-map-color-box-high-veryhigh{
+    background-color: #3CB371;
+}
+
+.heap-map-grid-items{
+    padding: 0% !important;
+}
+
+.heap-map-grid-months{
+    font-weight: 500;
+    font-size: small;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

@@ -23,3 +23,8 @@
 .tab-card-chip-season{
     border-radius: 5px !important;
 }
+
+.tab-panel-scroll{
+    overflow: scroll;
+    max-height: 26vh;
+}

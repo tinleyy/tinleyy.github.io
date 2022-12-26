@@ -177,10 +177,13 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
   useEffect(() => {
     if (selectedCard === "Index") fetchAllIndexes();
     if (selectedCard === "Model") fetchAllModels();
-    fetchAllTags();
-    fetchAllItemsLength();
     if (refresh) setTimeout(function () { setRefresh(false) }, 3000);
   }, [skip, keyword, selectedCard, updated]);
+
+  useEffect(() => {
+    if(tags.length < 1) fetchAllTags();
+    if(!allItemsLength) fetchAllItemsLength();
+  }, []);
 
   return (
     <div className="Dashboad">

@@ -1,0 +1,25 @@
+.box-method-button {
+    margin: auto !important;
+}
+
+.box-method {
+    background-color: white;
+}
+
+.box-layer-display {
+    background-color: white;
+    flex-direction: column-reverse;
+    display: flex;
+}
+
+.box-layer-display-box {
+    background-color: lightgrey;
+    color: #fff;
+    font-size: 0.5rem;
+}
+
+.box-layer-display-lines {
+    background-color: #fff;
+    border: 1px solid #000;
+    height: 1vh;
+}

@@ -36,7 +36,7 @@ export default function CreateSensorForm() {
         control={control}
         defaultValue={0}
       />
-      <div>Distinct</div>
+      <div>District</div>
       <Controller
         render={({ field }) => <Input {...field} className="materialUIInput" />}
         name="distinct"

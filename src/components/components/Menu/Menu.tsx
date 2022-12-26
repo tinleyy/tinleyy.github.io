@@ -15,6 +15,7 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import {
     Link as RouterLink, MemoryRouter
 } from 'react-router-dom';
+import './Menu.css';
 
 interface ListItemLinkProps extends ListItemProps {
     to: string;
@@ -31,28 +32,29 @@ const breadcrumbNameMap: { [key: string]: string } = {
     '/pattern': 'Pattern'
 };
 
-function ListItemLink(props: ListItemLinkProps) {
-    const { to, open, children, ...other } = props;
-    const primary = breadcrumbNameMap[to];
-
-    let icon = null;
-    if (open != null) {
-        icon = open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />;
-    }
-
-    return (
-        <li>
-            <ListItem button component={RouterLink as any} to={to} {...other}>
-                { children }
-                <ListItemText primary={primary} />
-                {icon}
-            </ListItem>
-        </li>
-    );
-}
-
 export default function Menu({ handleChangePage }: { handleChangePage: Function }) {
     const [open, setOpen] = React.useState(true);
+    const [page, setPage] = React.useState('Home');
+
+    function ListItemLink(props: ListItemLinkProps) {
+        const { to, open, children, ...other } = props;
+        const primary = breadcrumbNameMap[to];
+
+        let icon = null;
+        if (open != null) {
+            icon = open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />;
+        }
+
+        return (
+            <li>
+                <ListItem button component={RouterLink as any} to={to} {...other} className="listItem-button" selected={primary === page? true : false}>
+                    {children}
+                    <ListItemText primary={primary} className="listItem-text" />
+                    {icon}
+                </ListItem>
+            </li>
+        );
+    }
 
     const handleClick = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -68,7 +70,10 @@ export default function Menu({ handleChangePage }: { handleChangePage: Function 
                     component="nav"
                 >
                     <List>
-                        <ListItemLink to="/home" onClick={() => handleChangePage(0)}>
+                        <ListItemLink to="/home" onClick={() => {
+                            setPage('Home');
+                            handleChangePage(0);
+                        }}>
                             <ListItemIcon>
                                 <HomeIcon />
                             </ListItemIcon>
@@ -79,17 +84,26 @@ export default function Menu({ handleChangePage }: { handleChangePage: Function 
                                 <ListItemLink sx={{ pl: 4 }} to="/inbox/important" />
                             </List>
                         </Collapse> */}
-                        <ListItemLink to="/sensor" onClick={() => handleChangePage(1)}>
-                            <ListItemIcon>
+                        <ListItemLink to="/sensor" onClick={() => {
+                            setPage('Sensor');
+                            handleChangePage(1);
+                        }}>
+                            <ListItemIcon className="listItem-icon">
                                 <LocationOnIcon />
                             </ListItemIcon>
                         </ListItemLink>
-                        <ListItemLink to="/relationship" onClick={() => handleChangePage(5)}>
+                        <ListItemLink to="/relationship" onClick={() => {
+                            setPage('RelationShip');
+                            handleChangePage(5);
+                        }}>
                             <ListItemIcon>
                                 <QueryStatsIcon />
                             </ListItemIcon>
                         </ListItemLink>
-                        <ListItemLink to="/pattern" onClick={() => handleChangePage(4)}>
+                        <ListItemLink to="/pattern" onClick={() => {
+                            setPage('Pattern');
+                            handleChangePage(4);
+                        }}>
                             <ListItemIcon>
                                 <StackedLineChartIcon />
                             </ListItemIcon>

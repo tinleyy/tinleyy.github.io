@@ -1,0 +1,21 @@
+.listItem-button-selected {
+    background-color: lightgrey;
+}
+
+.listItem-button,
+.MuiListItem-button {
+    margin: 0.5vw !important;
+    padding-left: 20px !important;
+    width: auto !important;
+    border-radius: 20px !important;
+}
+
+.listItem-icon,.MuiListItemIcon-root {
+    min-width: auto !important;
+    margin-right: 0.5vw;
+}
+
+.listItem-text, .MuiListItemText-root>span {
+    font-size: 0.9rem;
+    font-weight: 300;
+}

@@ -4,7 +4,6 @@ import './GeneralDisplayPanel.css';
 import { DataLength } from '../../../service/global';
 
 export default function GeneralDisplayPanel({ data, selectedCard, handleSelectIndexModel, allItemsLength }: { data: any[], selectedCard: string, handleSelectIndexModel: Function, allItemsLength: DataLength | undefined }) {
-  console.log(allItemsLength);
   const dataset = data;
 
   const PanelContent = ({ content }: { content: any[] }) => {

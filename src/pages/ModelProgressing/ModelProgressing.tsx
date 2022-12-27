@@ -15,20 +15,6 @@ import "./ModelProgressing.css";
 import SelectCheckBox from "./SelectCheckBox/SelectCheckBox";
 import InfoIcon from '@mui/icons-material/Info';
 
-const Title = () => {
-    return (
-        <>
-            <Button color="inherit">
-                <DoneAllIcon />
-                Auto Complete
-            </Button>
-            <Button style={{ float: 'right' }}>
-                <InfoIcon />
-            </Button>
-        </>
-    );
-}
-
 type Props = {
     currentLoaded: number,
     targetLoaded: number,
@@ -83,6 +69,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
     const [selectDistinctChecked, setSelectDistinctChecked] = useState([true, true]);
     const [indexTotal, setIndexTotal] = useState<Array<any>>([]);
     const [processFormulaResult, setProcessFormulaResult] = useState<Array<any>>([]);
+    const [autoComplete, setAutoComplete] = useState(false);
 
     const handleSelectAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectAllChecked(event.target.checked);
@@ -207,7 +194,8 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                     missing: missing
                 })
             }))
-            setLoading(3);
+
+            autoComplete ? setLoading(4) : setLoading(3);
         } else if (loading === 4) {
             let thisIndexTotal: Array<any> = indexTotal[processingIndex] ?? [];
             dates.map((date, index) => {
@@ -267,7 +255,7 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
                 const result = processFormula(formula ?? "", indexList);
                 processFormulaResult.push({
                     amount: result,
-                    created_at: moment(date).format("YYYY-DD-MM 00:00:00")
+                    created_at: moment(date).format("YYYY-MM-DD 00:00:00")
                 });
                 setProcessFormulaResult(processFormulaResult);
             })
@@ -290,7 +278,16 @@ export default function ModelProgressing({ modelDetails, handleSwitchToModelDeta
     if (indexes) {
         return (
             <>
-                <Title />
+                <Button color="inherit" onClick={() => {
+                    setAutoComplete(true); setLoading(4);
+                }}>
+                    <DoneAllIcon />
+                    Auto Complete
+                </Button>
+                <Button style={{ float: 'right' }}>
+                    <InfoIcon />
+                </Button>
+
                 <Card>
                     <CardContent>
                         <h5>{Object.values(indexes).length} Indexes Found In Model {modelDetails?.name}</h5>

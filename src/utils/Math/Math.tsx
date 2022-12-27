@@ -32,9 +32,9 @@ export function processFormula(formula: string, numList: Array<any>) {
 
     let newFormula = formula;
     numList.map((num, index) => {
-        newFormula = newFormula.replace(`%${index + 1}`, num);
+        newFormula = newFormula.replaceAll(`%${index + 1}`, num);
     })
     console.log(newFormula);
-    // console.log(eval(newFormula));  
+    console.log(eval(newFormula));  
     return eval(newFormula);
 }

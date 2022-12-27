@@ -267,7 +267,7 @@ export default function Pattern({ handleOpenCloseMenu }: { handleOpenCloseMenu: 
                         </div>
                     </Grid>
 
-                    <Grid item>
+                    {/* <Grid item>
                         <div>
                             <Card>
                                 <CardContent>
@@ -280,7 +280,7 @@ export default function Pattern({ handleOpenCloseMenu }: { handleOpenCloseMenu: 
                                 </Box>
                             </Card>
                         </div>
-                    </Grid>
+                    </Grid> */}
 
                     <Grid item>
                         <div>

@@ -89,13 +89,13 @@ export default function CreateIndexForm() {
         defaultValue=""
       />
       {errors.unit && <div className="form-error-text">Unit is required*</div>}
-      {/* <div>Hidden</div>
+      <div>Hidden</div>
       <Controller
         name="hidden"
         control={control}
         render={({ field }) => <Checkbox {...field} />}
         defaultValue={false}
-      /> */}
+      />
 
       <div className="submit-button">
         <Button onClick={handleSubmit(onSubmit)}>

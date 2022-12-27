@@ -278,7 +278,7 @@ export default function SearchIndexModel({ handleOpenCloseMenu, handleSwitchToIn
 
         {
           pTotal && pPage ?
-            <Pagination count={pTotal} page={pPage} onChange={handleChangePPage} />
+            <Pagination count={pTotal} page={pPage} onChange={handleChangePPage} showFirstButton showLastButton/>
             : <></>
         }
       </div>

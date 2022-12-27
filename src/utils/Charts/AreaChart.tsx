@@ -76,7 +76,7 @@ function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xM
           var prev = context.dataset.data[i - 1];
           var diff = prev !== undefined ? prev - value : 0;
           var glyph = diff < 0 ? '▲' : diff > 0 ? '▼' : '◆';
-          return glyph + ' ' + Math.round(value);
+          return glyph + ' ' + value.toFixed(3);
         },
         padding: 6
       } : {
@@ -148,7 +148,7 @@ function mapToOptions({ options, firstdatedatalabel, lastdatedatalabel, xMax, xM
             week: "yyyy-MM-dd HH:mm:ss.SSS",
             month: "MM",
             quarter: "yyyy-MM-dd HH:mm:ss.SSS",
-            year: "yyyy"
+            year: "yyyy MMM"
           },
           unit: "year"
         },
@@ -228,6 +228,8 @@ export function AreaChart({ data, chartOptions, fillArea, showLine, standard, sh
     standard: standard,
     showHighestBox: showHighestBox
   });
+
+  console.log(chartdata);
 
   return <Line options={options} data={chartdata} />;
 }

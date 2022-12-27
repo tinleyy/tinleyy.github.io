@@ -134,6 +134,7 @@ export default function BasicTabs({ handleIndexesChanges, handleModelsChanges }:
     }
     const handleClearFormulaIndexes = () => {
         setFormulaIndexes([]);
+        setFormulaId(0);
     }
     const handleClearFormulaModels = () => {
         setFormulaModels([]);

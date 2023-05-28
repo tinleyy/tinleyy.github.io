@@ -1,0 +1,160 @@
+[{
+    "id": 0,
+    "chi": "可持續",
+    "eng": "Sustainable",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 1,
+    "chi": "播放音樂",
+    "eng": "Play music",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 2,
+    "chi": "重用",
+    "eng": "Re-use",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 3,
+    "chi": "安心",
+    "eng": "Relax",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 4,
+    "chi": "複雜性",
+    "eng": "Complex",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 5,
+    "chi": "大小可改變",
+    "eng": "Auto-Size",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 6,
+    "chi": "可發出光芒",
+    "eng": "Light",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 7,
+    "chi": "便利",
+    "eng": "Convenient",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 8,
+    "chi": "快速移動",
+    "eng": "fast-movement",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 9,
+    "chi": "幫助記憶",
+    "eng": "memory",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 10,
+    "chi": "多種形態",
+    "eng": "multiple forms",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 11,
+    "chi": "可供休息",
+    "eng": "Rest",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 12,
+    "chi": "住宿",
+    "eng": "",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 13,
+    "chi": "烹調",
+    "eng": "Cook",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 14,
+    "chi": "可吸收",
+    "eng": "",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1
+  },
+  {
+    "id": 15,
+    "chi": "定位",
+    "eng": "",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1 
+    },
+    {
+    "id": 16,
+    "chi": "可反射",
+    "eng": "",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1 
+},
+{
+    "id": 17,
+    "chi": "可散熱",
+    "eng": "",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1 
+},
+{
+    "id": 18,
+    "chi": "可旋轉",
+    "eng": "",
+    "type": "功能性",
+    "rank": 1,
+    "relationship": -1 
+},
+{
+  "id": 19,
+  "chi": "可驅蚊",
+  "eng": "",
+  "type": "功能性",
+  "rank": 1,
+  "relationship": -1 
+}]

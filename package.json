@@ -38,7 +38,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.4.5",
     "react-scripts": "5.0.1",
-    "react-select": "^5.7.0",
+    "react-select": "^5.7.3",
     "react-window": "^1.8.8",
     "recoil": "^0.7.6",
     "styled-components": "^5.3.6",

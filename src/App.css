@@ -38,15 +38,117 @@
   }
 }
 
-#map {
-  position: initial !important;
+#background {
+  background: #a7bcb9;
+  color: white;
+  height: 100vh;
 }
 
-.layer1 {
-  z-index: 1;
+.default {
+  font-family: Montserrat;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
-.layer2 {
-  z-index: 2;
+#center-text {
+  font-size: xxx-large;
+  position: fixed;
+  top: 50vh;
+  left: 50vw;
 }
 
+.second{
+  font-size: 2rem;
+}
+
+#center-top-text {
+  position: fixed;
+  top: 45vh;
+  left: 50vw;
+}
+
+#center-bottom-text {
+  position: fixed;
+  top: 60vh;
+  left: 50vw;
+}
+
+#text-3 {
+  position: fixed;
+  top: 55vh;
+  left: 25vw;
+}
+
+#text-4 {
+  position: fixed;
+  top: 80vh;
+  left: 70vw;
+}
+
+#text-5{
+  position: fixed;
+  top: 20vh;
+  left: 40vw;
+}
+
+#text-6{
+  position: fixed;
+  top: 48vh;
+  left: 70vw;
+}
+
+#text-7{
+  position: fixed;
+  top: 70vh;
+  left: 30vw;
+}
+
+#text-8{
+  position: fixed;
+  top: 30vh;
+  left: 20vw;
+  font-size: 3rem;
+}
+
+#text-9{
+  position: fixed;
+  top: 10vh;
+  left: 10vw;
+  font-size: 3rem;
+}
+
+#text-10{
+  position: fixed;
+  top: 70vh;
+  left: 60vw;
+  font-size: 3rem;
+}
+
+#text-11{
+  position: fixed;
+  top: 10vh;
+  left: 60vw;
+  font-size: 2.2rem;
+}
+
+#text-12{
+  position: fixed;
+  top: 50vh;
+  left: 15vw;
+  font-size: 2.2rem;
+}
+
+#text-13{
+  position: fixed;
+  top: 20vh;
+  left: 65vw;
+  font-size: 2.5rem;
+}
+
+.lan{
+  color: white !important;
+}
+
+#lan-bg{
+  background-color:black;
+}
